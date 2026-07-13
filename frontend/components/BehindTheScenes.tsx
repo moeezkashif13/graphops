@@ -69,11 +69,11 @@ export function BehindTheScenes() {
 
         {/* Content Lists */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar ">
-          <div className="p-4 rounded-xl border border-indigo-500/10 bg-[#0f172b] space-y-1.5 shrink-0">
+          <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-50/50 space-y-1.5 shrink-0">
             <h4 className="text-xs font-bold font-mono text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
               <Cpu className="h-3.5 w-3.5" /> Core Architecture Index
             </h4>
-            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+            <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
               Select an architecture layer category from the panel configuration
               indexes below to open an interactive full-screen viewport
               environment.
@@ -81,16 +81,16 @@ export function BehindTheScenes() {
           </div>
 
           {/* Map Grid Lists Rendering all 3 Diagrams */}
-          <div className="space-y-4 flex flex-wrap justify-between">
+          <div className="gap-4 flex flex-wrap justify-between">
             {diagrams.map((diag) => (
               <div
                 key={diag.id}
-                className="group relative border border-slate-800/80 rounded-xl overflow-hidden bg-slate-950 transition-all duration-300 hover:border-slate-700 shadow-lg flex flex-col w-[450px]"
+                className="group relative border border-slate-200 rounded-xl overflow-hidden bg-white transition-all duration-300 hover:border-slate-300 shadow-sm flex flex-col w-[450px] h-full"
               >
                 {/* Meta Panel Info */}
-                <div className="p-3 bg-slate-900/40 border-b border-slate-900 flex justify-between items-start gap-4">
+                <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex justify-between items-start gap-4">
                   <div className="space-y-0.5">
-                    <h5 className="text-[11px] font-mono font-bold text-slate-200 uppercase tracking-wide">
+                    <h5 className="text-[11px] font-mono font-bold text-slate-800 uppercase tracking-wide">
                       {diag.title}
                     </h5>
                     <p className="text-[10px] text-slate-500 font-sans leading-normal">
@@ -106,7 +106,7 @@ export function BehindTheScenes() {
                   </button>
                 </div>
 
-                <div className="h-[250px] bg-[#0b0f19]/60 relative pointer-events-none transition-opacity">
+                <div className="h-[250px] bg-slate-50/30 relative pointer-events-none transition-opacity">
                   <ReactFlow
                     nodes={diag.nodes}
                     edges={diag.edges}
@@ -117,7 +117,7 @@ export function BehindTheScenes() {
                     zoomOnScroll={false}
                     panOnDrag={false}
                   >
-                    <Background color="#1e293b" gap={12} size={1} />
+                    <Background color="#cbd5e1" gap={12} size={1} />
                   </ReactFlow>
                 </div>
               </div>
@@ -131,34 +131,34 @@ export function BehindTheScenes() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-slate-950/90 backdrop-blur-md"
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
             onClick={() => setActiveExpanded(null)}
           />
 
           {/* Main Display Core Canvas Container */}
-          <div className="relative w-full h-[85vh] md:h-[90vh] bg-[#0b0f19] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+          <div className="relative w-full h-[85vh] md:h-[90vh] bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
             {/* Control Strip Top Header Info */}
-            <div className="p-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-sm flex items-center justify-between z-10">
+            <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between z-10">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold flex items-center gap-1.5">
                   <Move className="h-3 w-3 animate-pulse" /> Use scroll-wheel to
                   zoom // click and hold canvas viewport grid background to pan
                 </span>
-                <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wide">
+                <h3 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wide">
                   {activeExpanded.title}
                 </h3>
               </div>
 
               <button
                 onClick={() => setActiveExpanded(null)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono font-bold uppercase text-slate-400 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:text-white transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono font-bold uppercase text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm"
               >
                 <X className="h-3.5 w-3.5" /> Exit Viewport
               </button>
             </div>
 
             {/* FULLY FUNCTIONAL INTERACTIVE REACT FLOW CANVAS */}
-            <div className="flex-1 w-full h-full relative bg-[#0b0f19]">
+            <div className="flex-1 w-full h-full relative bg-slate-50/50">
               <ReactFlow
                 defaultNodes={activeExpanded.nodes}
                 defaultEdges={activeExpanded.edges}
@@ -166,20 +166,20 @@ export function BehindTheScenes() {
                 fitViewOptions={{ padding: 0.25 }}
                 minZoom={0.15}
                 maxZoom={1.5}
-                colorMode="dark"
+                colorMode="light"
               >
-                <Background color="#141b2e" gap={16} size={1.5} />
-                <Controls className="bg-slate-900 border border-slate-800 text-slate-400 rounded-lg overflow-hidden fill-slate-400 shadow-md" />
+                <Background color="#cbd5e1" gap={16} size={1.5} />
+                <Controls className="bg-white border border-slate-200 text-slate-600 rounded-lg overflow-hidden fill-slate-600 shadow-md" />
                 <MiniMap
                   style={{
-                    background: "#0f172a",
-                    border: "1px solid #334155",
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
                     borderRadius: "8px",
                   }}
                   nodeColor={(node) =>
-                    (node.style?.borderColor as string) || "#1e293b"
+                    (node.style?.borderColor as string) || "#cbd5e1"
                   }
-                  maskColor="rgba(0, 0, 0, 0.5)"
+                  maskColor="rgba(255, 255, 255, 0.5)"
                 />
               </ReactFlow>
             </div>

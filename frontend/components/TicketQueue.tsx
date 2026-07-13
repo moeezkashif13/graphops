@@ -40,7 +40,7 @@ export function TicketQueue({
         );
       default:
         return (
-          <Badge className="bg-slate-800 text-slate-400 border border-slate-700/50 text-[10px] hover:bg-slate-800">
+          <Badge className="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] hover:bg-slate-100">
             Neutral
           </Badge>
         );
@@ -62,13 +62,13 @@ export function TicketQueue({
 
   return (
     // Fixed: Force strict maximum heights and block native window overflows
-    <div className="w-full h-full max-h-full flex flex-col overflow-hidden bg-slate-950">
+    <div className="w-full h-full max-h-full flex flex-col overflow-hidden bg-slate-50">
       {/* Header Context Section */}
-      <div className="p-4 border-b border-slate-800 bg-slate-900/30 backdrop-blur-sm shrink-0">
-        <h2 className="font-semibold text-sm tracking-tight text-slate-100">
+      <div className="p-4 border-b border-slate-200 bg-slate-50 backdrop-blur-sm shrink-0">
+        <h2 className="font-semibold text-sm tracking-tight text-slate-900">
           Inbound Triage Engine
         </h2>
-        <p className="text-[11px] text-slate-400 font-mono tracking-wider mt-0.5">
+        <p className="text-[11px] text-slate-500 font-mono tracking-wider mt-0.5">
           Real-time asynchronous streams
         </p>
       </div>
@@ -83,10 +83,10 @@ export function TicketQueue({
               return (
                 <Card
                   key={ticket.id}
-                  className={`cursor-pointer transition-all duration-200 border bg-slate-900/40 backdrop-blur-sm ${
+                  className={`cursor-pointer transition-all duration-200 border bg-white backdrop-blur-sm ${
                     isSelected
-                      ? "border-indigo-500 bg-slate-900/80 shadow-lg shadow-indigo-500/5 ring-1 ring-indigo-500/30"
-                      : "border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/60"
+                      ? "border-indigo-500 bg-indigo-50/50 shadow-sm shadow-indigo-500/10 ring-1 ring-indigo-500/20"
+                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                   onClick={() => onSelectTicket(ticket.id)}
                 >
@@ -94,7 +94,7 @@ export function TicketQueue({
                     <div className="flex items-center justify-between gap-2">
                       <span
                         className={`text-xs font-mono font-medium truncate ${
-                          isSelected ? "text-indigo-300" : "text-slate-400"
+                          isSelected ? "text-indigo-600" : "text-slate-700"
                         }`}
                       >
                         {ticket.sender}
@@ -107,7 +107,7 @@ export function TicketQueue({
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-300 line-clamp-2 font-normal leading-relaxed">
+                    <p className="text-xs text-slate-600 line-clamp-2 font-normal leading-relaxed">
                       {ticket.body}
                     </p>
 
@@ -116,7 +116,7 @@ export function TicketQueue({
                       {ticket.category?.map((cat) => (
                         <Badge
                           key={cat}
-                          className="bg-slate-950/60 text-slate-400 border border-slate-800 text-[10px] uppercase font-semibold tracking-wider font-mono"
+                          className="bg-slate-50 text-slate-600 border border-slate-200 text-[10px] uppercase font-semibold tracking-wider font-mono"
                         >
                           {cat}
                         </Badge>

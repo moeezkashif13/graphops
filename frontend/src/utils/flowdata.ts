@@ -1,9 +1,9 @@
 import type { Node, Edge } from "@xyflow/react";
 
 const commonNodeStyles = {
-  background: "#0f172a",
-  color: "#cbd5e1",
-  border: "2px solid #334155",
+  background: "#ffffff",
+  color: "#334155",
+  border: "2px solid #e2e8f0",
   borderRadius: "12px",
   padding: "12px",
   fontFamily: "var(--font-mono, monospace)",
@@ -21,7 +21,7 @@ export const topologyNodes: Node[] = [
     id: "t1",
     position: { x: 40, y: 150 },
     data: { label: "💻 React Client\n(Tailwind Workspace UI)" },
-    style: { ...commonNodeStyles, borderColor: "#3b82f6", color: "#f8fafc" },
+    style: { ...commonNodeStyles, borderColor: "#3b82f6", color: "#1e293b" },
   },
   {
     id: "t2",
@@ -84,19 +84,19 @@ export const graphNodes: Node[] = [
     id: "g2",
     position: { x: 270, y: 100 },
     data: { label: "🔍 Node 1: Classifier\n(Intent & Sentiment Analysis)" },
-    style: { ...commonNodeStyles, borderColor: "#059669", color: "#a7f3d0" },
+    style: { ...commonNodeStyles, borderColor: "#059669", color: "#065f46" },
   },
   {
     id: "g3",
     position: { x: 270, y: 200 },
     data: { label: "📖 Node 2: Vector RAG\n(pgvector Index Match)" },
-    style: { ...commonNodeStyles, borderColor: "#059669", color: "#a7f3d0" },
+    style: { ...commonNodeStyles, borderColor: "#059669", color: "#065f46" },
   },
   {
     id: "g4",
     position: { x: 270, y: 300 },
     data: { label: "✍️ Node 3: Composer\n(Response Generation Buffer)" },
-    style: { ...commonNodeStyles, borderColor: "#059669", color: "#a7f3d0" },
+    style: { ...commonNodeStyles, borderColor: "#059669", color: "#065f46" },
   },
   {
     id: "g5",
@@ -106,14 +106,14 @@ export const graphNodes: Node[] = [
       ...commonNodeStyles,
       borderColor: "#d97706",
       width: 150,
-      color: "#fde68a",
+      color: "#92400e",
     },
   },
   {
     id: "g6",
     position: { x: 490, y: 490 },
     data: { label: "⚠️ Node 4: Human Review\n(State Halted & Saved)" },
-    style: { ...commonNodeStyles, borderColor: "#ef4444", color: "#fee2e2" },
+    style: { ...commonNodeStyles, borderColor: "#ef4444", color: "#991b1b" },
   },
   {
     id: "g7",
@@ -124,7 +124,7 @@ export const graphNodes: Node[] = [
 ];
 
 export const graphEdges: Edge[] = [
-  { id: "eg1", source: "g1", target: "g2", style: { stroke: "#475569" } },
+  { id: "eg1", source: "g1", target: "g2", style: { stroke: "#94a3b8" } },
   { id: "eg2", source: "g2", target: "g3", style: { stroke: "#059669" } },
   { id: "eg3", source: "g3", target: "g4", style: { stroke: "#059669" } },
   { id: "eg4", source: "g4", target: "g5", style: { stroke: "#059669" } },
@@ -140,7 +140,7 @@ export const graphEdges: Edge[] = [
     source: "g5",
     target: "g7",
     label: "Neutral Stream",
-    style: { stroke: "#475569" },
+    style: { stroke: "#94a3b8" },
   },
   {
     id: "eg7",

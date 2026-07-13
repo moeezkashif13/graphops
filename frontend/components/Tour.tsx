@@ -159,7 +159,7 @@ export default function Tour() {
 
       {/* Floating Step Card */}
       <div
-        className="fixed z-50 w-[320px] p-4 rounded-xl border border-indigo-500/40 bg-slate-900/95 text-slate-200 font-mono shadow-2xl transition-all duration-200 pointer-events-auto"
+        className="fixed z-50 w-[320px] p-4 rounded-xl border border-indigo-500/30 bg-white/95 text-slate-800 font-mono shadow-2xl transition-all duration-200 pointer-events-auto"
         style={{ top: `${coords.top}px`, left: `${coords.left}px` }}
       >
         <div className="flex items-center justify-between mb-2">
@@ -169,21 +169,21 @@ export default function Tour() {
           </div>
           <button
             onClick={handleClose}
-            className="text-slate-500 hover:text-slate-300"
+            className="text-slate-400 hover:text-slate-600"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <h4 className="text-xs font-bold text-white mb-1.5 uppercase tracking-wide">
+        <h4 className="text-xs font-bold text-slate-900 mb-1.5 uppercase tracking-wide">
           {currentStepData.title}
         </h4>
-        <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+        <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
           {currentStepData.content}
         </p>
 
-        <div className="flex items-center justify-between pt-2 mt-3 border-t border-slate-800">
-          <span className="text-[9px] uppercase text-amber-400/80 font-semibold animate-pulse">
+        <div className="flex items-center justify-between pt-2 mt-3 border-t border-slate-200">
+          <span className="text-[9px] uppercase text-amber-600/80 font-semibold animate-pulse">
             ⚡ Perform action to advance
           </span>
         </div>

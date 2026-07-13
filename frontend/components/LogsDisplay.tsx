@@ -21,18 +21,18 @@ export function TraceLogsDisplay({ logs }: TraceLogsDisplayProps) {
             key={index}
             className={`p-3 rounded-lg border transition-all duration-200 ${
               isRecruiterMode
-                ? "bg-amber-500/[0.02] border-amber-500/10 text-slate-300"
-                : "bg-slate-950 border-slate-800/60 text-emerald-400"
+                ? "bg-amber-500/[0.01] border-amber-500/20 text-slate-700"
+                : "bg-slate-50 border-slate-200/60 text-emerald-700"
             }`}
           >
             {!isRecruiterMode && (
-              <span className="text-slate-600 mr-1.5 font-sans">$</span>
+              <span className="text-slate-400 mr-1.5 font-sans">$</span>
             )}
             <span
               dangerouslySetInnerHTML={{
                 __html: displayMessage.replace(
                   /\*\*(.*?)\*\*/g,
-                  '<b class="text-white">$1</b>',
+                  '<b class="text-slate-950 font-bold">$1</b>',
                 ),
               }}
             />

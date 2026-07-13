@@ -23,14 +23,14 @@ const CustomWorkflowNode = ({ data }: any) => {
     <div
       className={`px-3 py-2.5 shadow-2xl rounded-xl border font-mono transition-all duration-300 w-[170px] backdrop-blur-sm relative ${
         data.isActive
-          ? "border-indigo-500 bg-indigo-950/40 text-indigo-300 shadow-indigo-500/10 ring-1 ring-indigo-500/30"
+          ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-indigo-500/5 ring-1 ring-indigo-500/20"
           : data.isPaused
-            ? "border-amber-500 bg-amber-950/40 text-amber-400 shadow-amber-500/10 ring-1 ring-amber-500/30 animate-pulse"
+            ? "border-amber-500 bg-amber-50 text-amber-700 shadow-amber-500/5 ring-1 ring-amber-500/20 animate-pulse"
             : data.isCompleted
-              ? "border-emerald-500 bg-emerald-950/30 text-emerald-400"
+              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
               : data.isFailed
-                ? "border-rose-500 bg-rose-950/30 text-rose-400"
-                : "border-slate-800 bg-slate-900/40 text-slate-600"
+                ? "border-rose-500 bg-rose-50 text-rose-700"
+                : "border-slate-200 bg-slate-50 text-slate-500"
       }`}
     >
       <Handle type="target" position={Position.Top} className="opacity-0" />
@@ -43,7 +43,7 @@ const CustomWorkflowNode = ({ data }: any) => {
                 ? "bg-emerald-500/10 border-emerald-500/20"
                 : data.isFailed
                   ? "bg-rose-500/10 border-rose-500/20"
-                  : "bg-slate-950 border-slate-800"
+                  : "bg-white border-slate-200"
           }`}
         >
           <Icon className="h-3.5 w-3.5" />
@@ -217,7 +217,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
             ? "#6366f1"
             : pipelineState.classifierDone
               ? "#10b981"
-              : "#1e293b",
+              : "#cbd5e1",
           strokeWidth: 1.5,
         },
       },
@@ -231,7 +231,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
             ? "#6366f1"
             : pipelineState.researcherDone
               ? "#10b981"
-              : "#1e293b",
+              : "#cbd5e1",
           strokeWidth: 1.5,
         },
       },
@@ -249,7 +249,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
             : isRejected
               ? "#f43f5e"
               : isResolved && !pipelineState.humanDone
-                ? "#1e293b"
+                ? "#cbd5e1"
                 : "#10b981",
           strokeWidth: 1.5,
           strokeDasharray: isPaused ? "4" : "0",
@@ -263,7 +263,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
         label: isResolved && !isPaused ? "auto-clear" : "",
         labelStyle: { fill: "#10b981", fontSize: 7, fontFamily: "monospace" },
         style: {
-          stroke: isResolved && !isPaused ? "#10b981" : "#1e293b",
+          stroke: isResolved && !isPaused ? "#10b981" : "#cbd5e1",
           strokeWidth: 1.5,
         },
       },
@@ -273,7 +273,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
         source: "human_review",
         target: "end_terminal",
         style: {
-          stroke: isResolved ? "#10b981" : isRejected ? "#f43f5e" : "#1e293b",
+          stroke: isResolved ? "#10b981" : isRejected ? "#f43f5e" : "#cbd5e1",
           strokeWidth: 1.5,
         },
       },
@@ -281,7 +281,7 @@ export function AgentVisualGraph({ status, logs = [] }: AgentVisualGraphProps) {
   }, [status, pipelineState]);
 
   return (
-    <div className="w-full h-full bg-slate-950/40 relative shadow-inner">
+    <div className="w-full h-full bg-slate-50 relative shadow-inner">
       <ReactFlow
         nodes={nodes}
         edges={edges}

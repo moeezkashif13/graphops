@@ -84,15 +84,15 @@ export default function App() {
 
   return (
     <>
-      <div className="h-screen w-screen flex flex-col overflow-hidden font-sans bg-slate-950 text-slate-100 antialiased">
+      <div className="h-screen w-screen flex flex-col overflow-hidden font-sans bg-slate-50 text-slate-800 antialiased">
         {/* ─── Premium Modern Header ─── */}
-        <header className="h-16 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md flex items-center justify-between px-6 z-20 shrink-0">
+        <header className="h-16 border-b border-slate-200 bg-white/70 backdrop-blur-md flex items-center justify-between px-6 z-20 shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-indigo-600/10 rounded-lg border border-indigo-500/20">
               <Layers className="h-5 w-5 text-indigo-400 stroke-[2]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-semibold text-sm tracking-tight text-white">
+              <span className="font-semibold text-sm tracking-tight text-slate-900">
                 OmniAgent CRM Control Panel
               </span>
             </div>
@@ -104,7 +104,7 @@ export default function App() {
               size="sm"
               id="ticket-queue-trigger"
               onClick={() => setIsBtsOpen(!isBtsOpen)}
-              className="flex items-center gap-2 border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition-all"
+              className="flex items-center gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
             >
               <Terminal className="h-4 w-4 text-indigo-400" />
               {isBtsOpen ? "Hide Behind The Scenes" : "View Behind The Scenes"}
@@ -114,7 +114,7 @@ export default function App() {
               size="sm"
               id="ticket-queue-trigger"
               onClick={() => setIsSimOpen(!isSimOpen)}
-              className="flex items-center gap-2 border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition-all"
+              className="flex items-center gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
             >
               <Terminal className="h-4 w-4 text-indigo-400" />
               {isSimOpen ? "Hide Simulator" : "Open Simulation Panel"}
@@ -131,7 +131,7 @@ export default function App() {
         {/* ─── Main Content Container ─── */}
         <div className="flex flex-1 overflow-hidden relative">
           {/* Left Hand Queue Panel */}
-          <div className="w-96 border-r border-slate-800 h-full flex flex-col bg-slate-900/20 shrink-0">
+          <div className="w-96 border-r border-slate-200 h-full flex flex-col bg-slate-100/30 shrink-0">
             {loadingQueue ? (
               <div className="flex-1 flex items-center justify-center">
                 <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
@@ -147,7 +147,7 @@ export default function App() {
 
           {/* Central Core Agent Workflow Canvas */}
           <main
-            className={`flex-1 h-full ${!activeTicket ? "flex items-center" : ""} overflow-y-auto bg-slate-950/40 custom-scrollbar p-1`}
+            className={`flex-1 h-full ${!activeTicket ? "flex items-center" : ""} overflow-y-auto bg-slate-50/50 custom-scrollbar p-1`}
           >
             <AgentWorkspace
               key={selectedTicketId} // FORCE FIX: Destroys & completely resets workspace states on switch
@@ -161,7 +161,7 @@ export default function App() {
 
           {/* Behind The Scenes Panel Start*/}
           <div
-            className={`absolute top-0 right-0 h-full w-full bg-black shadow-2xl z-50 transition duration-500 ease-in-out flex flex-col ${
+            className={`absolute top-0 right-0 h-full w-full bg-slate-900/60 shadow-2xl z-50 transition duration-500 ease-in-out flex flex-col ${
               isBtsOpen ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
           >
@@ -173,19 +173,19 @@ export default function App() {
           {/* Behind The Scenes Panel End */}
 
           <div
-            className={`absolute top-0 right-0 h-full w-[420px] bg-slate-900 border-l border-slate-800 shadow-2xl z-30 transform transition-transform duration-300 ease-in-out flex flex-col ${
+            className={`absolute top-0 right-0 h-full w-[420px] bg-white border-l border-slate-200 shadow-2xl z-30 transform transition-transform duration-300 ease-in-out flex flex-col ${
               isSimOpen ? "translate-x-0" : "translate-x-full"
             }`}
           >
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/40">
-              <span className="text-xs font-bold font-mono tracking-wider text-slate-400 uppercase">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <span className="text-xs font-bold font-mono tracking-wider text-slate-500 uppercase">
                 Pipeline Testing Playground
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsSimOpen(false)}
-                className="text-slate-400 hover:text-white hover:bg-slate-800 text-xs px-2 h-7"
+                className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 text-xs px-2 h-7"
               >
                 ✕ Close
               </Button>

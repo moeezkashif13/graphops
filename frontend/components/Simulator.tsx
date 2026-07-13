@@ -57,12 +57,12 @@ export function Simulator({
   };
 
   return (
-    <div className="p-5 bg-slate-900 border border-slate-800 rounded-xl mb-6 shadow-xl">
+    <div className="p-5 bg-white border border-slate-200 rounded-xl mb-6 shadow-sm">
       {/* ... keep JSX body layout elements identical ... */}
-      <h3 className="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-2">
+      <h3 className="text-sm font-semibold text-slate-900 mb-2 flex items-center gap-2">
         ⚡ Live Pipeline Simulation Playground
       </h3>
-      <p className="text-xs text-slate-400 mb-4">
+      <p className="text-xs text-slate-500 mb-4">
         Test the real-time AI engine. Use a pre-configured scenario or type any
         custom request to see the LangGraph state machine categorize, search,
         and pause live.
@@ -70,7 +70,7 @@ export function Simulator({
 
       {/* --- Section A: Quick Presets --- */}
       <div id="agent-graph-viewport" className="mb-4">
-        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+        <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">
           Option 1: Quick Presets
         </span>
         <div className="flex flex-col gap-2">
@@ -81,7 +81,7 @@ export function Simulator({
               onClick={() => {
                 triggerSimulation(tmpl.sender, tmpl.body);
               }}
-              className="text-left text-xs bg-slate-800/60 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-700/60 transition-all duration-150 disabled:opacity-50"
+              className="text-left text-xs bg-slate-50 hover:bg-slate-100/80 text-slate-700 p-2.5 rounded-lg border border-slate-200/80 transition-all duration-150 disabled:opacity-50"
             >
               {tmpl.label}
             </button>
@@ -89,11 +89,11 @@ export function Simulator({
         </div>
       </div>
 
-      <div className="border-t border-slate-800 my-4"></div>
+      <div className="border-t border-slate-200 my-4"></div>
 
       {/* --- Section B: Custom Free-Form Input --- */}
       <div>
-        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+        <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">
           Option 2: Custom Live Input (No Strings Attached)
         </span>
         <div className="flex flex-col gap-3">
@@ -102,14 +102,14 @@ export function Simulator({
             value={customSender}
             onChange={(e) => setCustomSender(e.target.value)}
             placeholder="Sender Email Address"
-            className="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-slate-600 transition"
+            className="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 transition"
           />
           <textarea
-            rows={3}
+            rows={8}
             value={customBody}
             onChange={(e) => setCustomBody(e.target.value)}
             placeholder="Type anything here... Try writing an angry complaint or a simple technical question to watch the vector database trigger."
-            className="bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-300 focus:outline-none focus:border-slate-600 resize-none transition"
+            className="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 resize-none transition"
           />
           <button
             disabled={loading || !customBody.trim()}
