@@ -62,7 +62,7 @@ services:
 
       args:
         VITE_BACKEND_URL: /api/v1
-        VITE_BACKEND_WEBSOCKETS_URL: /api
+        VITE_BACKEND_WEBSOCKETS_URL: /
 
     container_name: crm_frontend_container
 
