@@ -1,27 +1,28 @@
-
 FROM node:24-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
 ARG VITE_BACKEND_URL
 ARG VITE_BACKEND_WEBSOCKETS_URL
+
 ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 ENV VITE_BACKEND_WEBSOCKETS_URL=$VITE_BACKEND_WEBSOCKETS_URL
 
 RUN npm run build
 
+FROM node:24-alpine
 
-FROM nginx:1.25-alpine
+WORKDIR /app
 
-COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+RUN npm install -g serve
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "-s", "dist", "-l", "80"]
