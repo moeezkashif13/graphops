@@ -25,9 +25,9 @@ import { TicketEntity } from './tickets/ticket.entity';
         autoLoadEntities: true,
         entities: [KnowledgeBaseEntity, TicketEntity],
         synchronize: true,
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        // ssl: {
+        //   rejectUnauthorized: false,
+        // },
       }),
     }),
     KnowledgeModule,
