@@ -2,12 +2,17 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    restart: always
 
     ports:
       - "80:80"
 
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+    depends_on:
+      - frontend
+      - backend
 
   postgres_db:
     image: pgvector/pgvector:pg17
@@ -29,6 +34,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+
+    container_name: crm_backend_container
 
     restart: always
 
@@ -54,15 +61,15 @@ services:
       dockerfile: Dockerfile
 
       args:
-        VITE_BACKEND_URL: http://localhost:3000/api/v1
-        VITE_BACKEND_WEBSOCKETS_URL: http://localhost:3000
+        VITE_BACKEND_URL: /api/v1
+        VITE_BACKEND_WEBSOCKETS_URL: /api
 
     container_name: crm_frontend_container
 
     restart: always
 
-    ports:
-      - "5173:80"
+    expose:
+      - "80"
 
     depends_on:
       - backend
