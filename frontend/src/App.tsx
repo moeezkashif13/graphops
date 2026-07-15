@@ -102,7 +102,6 @@ export default function App() {
             <Button
               variant="outline"
               size="sm"
-              id="ticket-queue-trigger"
               onClick={() => setIsBtsOpen(!isBtsOpen)}
               className="flex items-center gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
             >
@@ -161,13 +160,13 @@ export default function App() {
 
           {/* Behind The Scenes Panel Start*/}
           <div
-            className={`absolute top-0 right-0 h-full w-full bg-slate-900/60 shadow-2xl z-50 transition duration-500 ease-in-out flex flex-col ${
-              isBtsOpen ? "opacity-100 visible" : "opacity-0 invisible"
+            className={`absolute top-0 right-0 h-full w-full bg-slate-900/60 shadow-2xl z-50 transition duration-300 ease-in-out flex flex-col ${
+              isBtsOpen ? " translate-x-0" : " translate-x-full"
             }`}
           >
             <BehindTheScenes
-              isOpen={isBtsOpen}
-              onClose={() => setIsBtsOpen(false)}
+            // isOpen={isBtsOpen}
+            // onClose={() => setIsBtsOpen(false)}
             />
           </div>
           {/* Behind The Scenes Panel End */}

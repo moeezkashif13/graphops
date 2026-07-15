@@ -60,13 +60,6 @@ export function BehindTheScenes() {
 
       {/* Structural drawer layout viewport */}
       <div>
-        {/* <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors p-1.5 rounded-md hover:bg-slate-800"
-          >
-            <X className="h-4 w-4" />
-          </button> */}
-
         {/* Content Lists */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar ">
           <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-50/50 space-y-1.5 shrink-0">
