@@ -72,17 +72,17 @@ export function TicketQueue({
           className="text-[11px] font-medium uppercase tracking-[0.18em]"
           style={{ color: "#e07856" }}
         >
-          Inbound
+          Incoming
         </span>
         <h2
           className="mt-1 font-serif text-3xl leading-none"
           style={{ color: "#1a1a2e" }}
         >
-          Triage queue
+          Tickets
         </h2>
-        <p className="mt-1.5 text-[12px]" style={{ color: "#6b6b7d" }}>
-          Real-time asynchronous streams
-        </p>
+        {/* <p className="mt-1.5 text-[12px]" style={{ color: "#6b6b7d" }}>
+          Realtime asynchronous data
+        </p> */}
       </div>
 
       <div className="min-h-0 w-full flex-1">
@@ -95,7 +95,7 @@ export function TicketQueue({
                 <button
                   key={ticket.id}
                   onClick={() => onSelectTicket(ticket.id)}
-                  className="w-full rounded-2xl border p-4 text-left transition-all"
+                  className="w-full rounded-2xl cursor-pointer border p-4 text-left transition-all"
                   style={{
                     background: isSelected ? "#fff" : "#fff",
                     borderColor: isSelected ? "#0d5c63" : "#e6dfd1",
@@ -132,7 +132,7 @@ export function TicketQueue({
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
                     {ticket.sentiment && (
                       <span
-                        className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                        className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium"
                         style={{ background: tone.bg, color: tone.fg }}
                       >
                         {tone.Icon && <tone.Icon className="h-2.5 w-2.5" />}

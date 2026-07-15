@@ -3,6 +3,7 @@ import { TicketQueue } from "../components/TicketQueue";
 import { Simulator } from "../components/Simulator";
 import { AgentWorkspace } from "../components/AgentWorkspace";
 import { BehindTheScenes } from "../components/BehindTheScenes";
+import { UseCases } from "../components/UseCases";
 import Tour from "../components/Tour";
 import { Button } from "../components/ui/button";
 import { Keyboard, Layers, Loader2, Terminal, User, X } from "lucide-react";
@@ -17,6 +18,7 @@ export default function App() {
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [isSimOpen, setIsSimOpen] = useState(false);
   const [isBtsOpen, setIsBtsOpen] = useState(false);
+  const [isUseCasesOpen, setIsUseCasesOpen] = useState(false);
 
   const { data: tickets = [], isLoading: loadingQueue } = useGetTicketsQuery();
   const { data: graphState, refetch: refetchGraphState } =
@@ -104,10 +106,24 @@ export default function App() {
 
           <div className="flex flex-wrap items-center gap-2">
             <Button
+              size="sm"
+              id="ticket-queue-trigger"
+              onClick={() => {
+                setIsBtsOpen(false);
+                setIsUseCasesOpen(false);
+                setIsSimOpen(!isSimOpen);
+              }}
+              className="gap-2 cursor-pointer text-[12px] font-medium text-white"
+              style={{ background: "#e07856" }}
+            >
+              <Keyboard className="h-4 w-4" />
+              {isSimOpen ? "Close simulator" : "Open simulator"}
+            </Button>
+            <Button
               asChild
               variant="outline"
               size="sm"
-              className="gap-2 border text-[12px] font-medium"
+              className="gap-2 border cursor-pointer text-[12px] font-medium"
               style={{
                 borderColor: "#e6dfd1",
                 background: "#faf7f2",
@@ -128,10 +144,29 @@ export default function App() {
               variant="outline"
               size="sm"
               onClick={() => {
-                setIsBtsOpen(!isBtsOpen);
                 setIsSimOpen(false);
+                setIsBtsOpen(false);
+                setIsUseCasesOpen(!isUseCasesOpen);
               }}
-              className="gap-2 text-[12px] font-medium"
+              className="gap-2 cursor-pointer text-[12px] font-medium"
+              style={{
+                borderColor: "#e6dfd1",
+                background: "#faf7f2",
+                color: "#1a1a2e",
+              }}
+            >
+              <Terminal className="h-4 w-4" style={{ color: "#d4a147" }} />
+              {isUseCasesOpen ? "Hide Use Cases" : "View Use Cases"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setIsSimOpen(false);
+                setIsUseCasesOpen(false);
+                setIsBtsOpen(!isBtsOpen);
+              }}
+              className="gap-2 cursor-pointer text-[12px] font-medium"
               style={{
                 borderColor: "#e6dfd1",
                 background: "#faf7f2",
@@ -140,19 +175,6 @@ export default function App() {
             >
               <Terminal className="h-4 w-4" style={{ color: "#d4a147" }} />
               {isBtsOpen ? "Hide architecture" : "Architecture"}
-            </Button>
-            <Button
-              size="sm"
-              id="ticket-queue-trigger"
-              onClick={() => {
-                setIsBtsOpen(false);
-                setIsSimOpen(!isSimOpen);
-              }}
-              className="gap-2 text-[12px] font-medium text-white"
-              style={{ background: "#e07856" }}
-            >
-              <Keyboard className="h-4 w-4" />
-              {isSimOpen ? "Close simulator" : "Open simulator"}
             </Button>
           </div>
         </header>
@@ -199,6 +221,12 @@ export default function App() {
             <BehindTheScenes />
           </div>
 
+          <div
+            className={`absolute inset-0 z-40 transition-transform duration-300 ease-in-out ${isUseCasesOpen ? "translate-x-0" : "translate-x-full"}`}
+          >
+            <UseCases toggleUseCases={setIsUseCasesOpen} />
+          </div>
+
           {/* Simulator drawer */}
           <div
             className={`absolute top-0 right-0 z-30 flex h-full w-[440px] max-w-full flex-col border-l shadow-2xl transition-transform duration-300 ease-in-out ${isSimOpen ? "translate-x-0" : "translate-x-full"}`}
@@ -216,7 +244,7 @@ export default function App() {
               </span>
               <button
                 onClick={() => setIsSimOpen(false)}
-                className="grid h-7 w-7 place-items-center rounded-full transition-colors"
+                className="grid h-7 w-7 place-items-center cursor-pointer rounded-full transition-colors"
                 style={{ color: "#6b6b7d", background: "#faf7f2" }}
               >
                 <X className="h-4 w-4" />

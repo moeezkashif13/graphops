@@ -154,7 +154,7 @@ export function BehindTheScenes() {
             onClick={() => setActiveExpanded(null)}
           />
           <div
-            className="relative flex h-[90vh] w-full flex-col overflow-hidden rounded-2xl border shadow-2xl"
+            className="relative flex h-[85vh] w-full flex-col overflow-hidden rounded-2xl border shadow-2xl"
             style={{ background: "#faf7f2", borderColor: "#e6dfd1" }}
           >
             <div

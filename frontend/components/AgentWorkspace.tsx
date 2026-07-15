@@ -73,7 +73,7 @@ export function AgentWorkspace({
       <div className="grid h-full w-full flex-1 grid-cols-1 overflow-hidden lg:grid-cols-2">
         {/* LEFT — Payload + Graph */}
         <section
-          className="custom-scrollbar flex h-full flex-col space-y-6 overflow-y-auto border-r p-8"
+          className="custom-scrollbar flex h-full flex-col space-y-6 overflow-y-auto border-r px-6 py-5"
           style={{ borderColor: "#e6dfd1" }}
         >
           <div>

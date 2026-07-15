@@ -12,8 +12,7 @@ const TOUR_STEPS: TourStep[] = [
   {
     targetId: "ticket-queue-trigger",
     title: "Open the simulator",
-    content:
-      "Click 'Open simulator' in the header to fire a mock inbound webhook.",
+    content: "Click 'Open simulator' in the header to test application flow.",
     position: "bottom",
   },
   {
@@ -121,17 +120,16 @@ export default function Tour() {
       <div
         className="pointer-events-none fixed inset-0 z-40"
         style={{
-          background: "rgba(26,26,46,0.45)",
-          backdropFilter: "blur(1px)",
+          background: "rgba(0,0,0,0.6)",
+          // backdropFilter: "blur(1px)",
         }}
       />
       <div
-        className="fixed z-50 w-[320px] rounded-2xl border p-5 shadow-2xl transition-all"
+        className="fixed z-50 w-[320px] rounded-2xl  p-5 shadow-2xl transition-all"
         style={{
           top: coords.top,
           left: coords.left,
           background: "#faf7f2",
-          borderColor: "#0d5c63",
         }}
       >
         <div className="mb-3 flex items-center justify-between">
@@ -160,8 +158,8 @@ export default function Tour() {
         </p>
         <div className="mt-4 border-t pt-3" style={{ borderColor: "#e6dfd1" }}>
           <span
-            className="text-[10px] font-medium uppercase tracking-wider animate-pulse"
-            style={{ color: "#d4a147" }}
+            className="text-[11px] font-medium uppercase tracking-wider "
+            style={{ color: "rgb(224, 120, 86)" }}
           >
             → Perform action to advance
           </span>

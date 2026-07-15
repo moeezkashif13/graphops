@@ -3,3 +3,5 @@ create-zips.ps1
 todo.txt
 # docker-compose.yml
 private
+merger.sh
+merged_src_output.txt
