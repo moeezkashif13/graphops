@@ -12,7 +12,7 @@ export function TraceLogsDisplay({ logs }: TraceLogsDisplayProps) {
   );
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-3 font-mono text-[11px] leading-relaxed custom-scrollbar max-h-[220px]">
+    <div className="flex-1 border border-slate-200 bg-slate-100/50 rounded-lg shadow-lg p-4 space-y-3 font-mono text-[11px] leading-relaxed text-slate-700">
       {logs.map((log, index) => {
         const displayMessage = isRecruiterMode ? translateLogToEli5(log) : log;
 

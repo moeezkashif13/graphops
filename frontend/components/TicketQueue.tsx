@@ -11,6 +11,7 @@ export interface Ticket {
   sentiment: "URGENT_CHURN" | "NEUTRAL" | "ANGRY" | null;
   status: "processing" | "pending_approval" | "resolved" | "rejected";
   timestamp: string;
+  createdAt: string;
 }
 
 interface TicketQueueProps {

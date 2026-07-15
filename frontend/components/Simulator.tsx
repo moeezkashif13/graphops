@@ -2,12 +2,12 @@ import { useState } from "react";
 
 const mockTemplates = [
   {
-    label: "🔥 Angry Technical Issue (Triggers Human-in-the-Loop)",
+    label: "Angry Technical Issue (Triggers Human-in-the-Loop)",
     body: "I am extremely frustrated! Your real-time document sync sessions keep disconnecting constantly. Our team is facing critical delivery blockers due to your Nginx proxy socket layer timing out. Fix this immediately!",
     sender: "frustrated_client@enterprise.com",
   },
   {
-    label: "💰 Billing Mismatch (Triggers Stripe RAG Path)",
+    label: "Billing Mismatch (Triggers Stripe RAG Path)",
     body: "Hello, I am writing because my premium tier invoice shows an extra charge of $50 that was supposed to be a promotional ledger credit. Please check my billing history and adjust this back to zero.",
     sender: "finance_lead@startup.co",
   },
@@ -61,9 +61,8 @@ export function Simulator({
 
   return (
     <div className="p-5 bg-white border border-slate-200 rounded-xl mb-6 shadow-sm">
-      {/* ... keep JSX body layout elements identical ... */}
       <h3 className="text-sm font-semibold text-slate-900 mb-2 flex items-center gap-2">
-        ⚡ Live Pipeline Simulation Playground
+        Live Pipeline Simulation Playground
       </h3>
       <p className="text-xs text-slate-500 mb-4">
         Test the real-time AI engine. Use a pre-configured scenario or type any
@@ -112,7 +111,7 @@ export function Simulator({
             value={customBody}
             onChange={(e) => setCustomBody(e.target.value)}
             placeholder="Type anything here... Try writing an angry complaint or a simple technical question to watch the vector database trigger."
-            className="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 resize-none transition"
+            className="bg-slate-50 border border-slate-200 placeholder:text-slate-400 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 resize-none transition"
           />
           <button
             disabled={loading || !customBody.trim()}

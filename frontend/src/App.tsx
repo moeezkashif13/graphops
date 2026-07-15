@@ -7,7 +7,7 @@ import { BehindTheScenes } from "../components/BehindTheScenes";
 import Tour from "../components/Tour";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { Layers, Loader2, Terminal } from "lucide-react";
+import { Keyboard, Layers, Loader2, Terminal, User } from "lucide-react";
 import {
   useGetTicketsQuery,
   useGetGraphStateQuery,
@@ -93,7 +93,7 @@ export default function App() {
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-tight text-slate-900">
-                OmniAgent CRM Control Panel
+                GraphOps Control Panel
               </span>
             </div>
           </div>
@@ -102,8 +102,25 @@ export default function App() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setIsBtsOpen(!isBtsOpen)}
-              className="flex items-center gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
+              className=" cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all p-0!"
+            >
+              <a
+                href="https://abdulmoeez.online"
+                target="_blank"
+                className="px-2.5 flex items-center h-full gap-2 "
+              >
+                <User className="h-4 w-4 text-indigo-400" />
+                <p>View Portfolio</p>
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setIsBtsOpen(!isBtsOpen);
+                setIsSimOpen(false);
+              }}
+              className="flex items-center cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
             >
               <Terminal className="h-4 w-4 text-indigo-400" />
               {isBtsOpen ? "Hide Behind The Scenes" : "View Behind The Scenes"}
@@ -112,10 +129,13 @@ export default function App() {
               variant="outline"
               size="sm"
               id="ticket-queue-trigger"
-              onClick={() => setIsSimOpen(!isSimOpen)}
-              className="flex items-center gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
+              onClick={() => {
+                setIsBtsOpen(false);
+                setIsSimOpen(!isSimOpen);
+              }}
+              className="flex items-center cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
             >
-              <Terminal className="h-4 w-4 text-indigo-400" />
+              <Keyboard className="h-4 w-4 text-indigo-400" />
               {isSimOpen ? "Hide Simulator" : "Open Simulation Panel"}
             </Button>
             <Badge
@@ -146,7 +166,7 @@ export default function App() {
 
           {/* Central Core Agent Workflow Canvas */}
           <main
-            className={`flex-1 h-full ${!activeTicket ? "flex items-center" : ""} overflow-y-auto bg-slate-50/50 custom-scrollbar p-1`}
+            className={`flex-1 ${!activeTicket ? "flex items-center" : ""} bg-slate-50/50 custom-scrollbar p-1`}
           >
             <AgentWorkspace
               key={selectedTicketId} // FORCE FIX: Destroys & completely resets workspace states on switch

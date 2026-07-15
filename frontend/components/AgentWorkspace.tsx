@@ -103,7 +103,7 @@ export function AgentWorkspace({
             <div className="flex-1 w-full border border-slate-200 rounded-xl overflow-hidden relative bg-slate-100/20 min-h-[340px]">
               <AgentVisualGraph status={ticket.status} logs={graphLogs} />
             </div>
-            <div className="border-t border-slate-200 bg-slate-50">
+            <div className="">
               <TraceLogsDisplay logs={graphLogs} />
             </div>
           </div>

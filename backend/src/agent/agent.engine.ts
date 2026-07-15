@@ -85,7 +85,6 @@ export async function researchWorkerNode(
     );
   }
 
-  // Handle runtime mock database checks for billing profiles
   if (state.categories.includes('Billing')) {
     stripeAccountStatus =
       'ACTIVE_PREMIUM_TIER. Outstanding dispute mismatch: pending $50 invoice credit correction pending manual ledger update.';
