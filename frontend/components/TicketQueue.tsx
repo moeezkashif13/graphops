@@ -84,10 +84,10 @@ export function TicketQueue({
               return (
                 <Card
                   key={ticket.id}
-                  className={`cursor-pointer transition-all duration-200 border bg-white backdrop-blur-sm ${
+                  className={`cursor-pointer transition-all duration-200 border bg-white backdrop-blur-sm ring-0 ${
                     isSelected
-                      ? "border-indigo-500 bg-indigo-50/50 shadow-sm shadow-indigo-500/10 ring-1 ring-indigo-500/20"
-                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      ? "border-indigo-500 bg-indigo-50/50 shadow-sm shadow-indigo-500/10 "
+                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50 "
                   }`}
                   onClick={() => onSelectTicket(ticket.id)}
                 >

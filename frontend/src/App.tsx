@@ -180,7 +180,7 @@ export default function App() {
 
           {/* Behind The Scenes Panel Start*/}
           <div
-            className={`absolute top-0 right-0 h-full w-full bg-slate-900/60 shadow-2xl z-50 transition duration-300 ease-in-out flex flex-col ${
+            className={`absolute top-0 right-0 h-full w-full bg-black/85 shadow-2xl z-50 transition duration-300 ease-in-out flex flex-col ${
               isBtsOpen ? " translate-x-0" : " translate-x-full"
             }`}
           >

@@ -27,9 +27,6 @@ export function Simulator({
   const [customSender, setCustomSender] = useState("recruiter_test@hiring.com");
 
   const triggerSimulation = async (sender, body) => {
-    console.log("hellloooo");
-
-    return;
     if (!body.trim()) return;
     setLoading(true);
     try {

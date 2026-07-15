@@ -74,9 +74,9 @@ export function AgentWorkspace({
 
   return (
     <div className="w-full h-full max-h-full flex flex-col overflow-hidden bg-slate-50">
-      <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full max-h-full flex-1 overflow-hidden">
+      <div className="grid grid-cols-1   lg:grid-cols-2 w-full h-full max-h-full flex-1 overflow-hidden">
         {/* Left Hand: Ticket Details & NEW Real-time LangGraph Visual Engine */}
-        <div className="p-6 overflow-y-auto border-r border-slate-200 flex flex-col space-y-5 custom-scrollbar h-full min-h-0">
+        <div className="p-6   overflow-y-auto border-r border-slate-200 flex flex-col space-y-5 custom-scrollbar h-full ">
           <div>
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-indigo-500">
               ⚡ Live Channel Stream Payload

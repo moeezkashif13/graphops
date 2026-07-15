@@ -62,7 +62,7 @@ export function BehindTheScenes() {
       <div>
         {/* Content Lists */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar ">
-          <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-50/50 space-y-1.5 shrink-0">
+          <div className="p-4 rounded-xl border border-indigo-500/20 bg-slate-100 space-y-1.5 shrink-0">
             <h4 className="text-xs font-bold font-mono text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
               <Cpu className="h-3.5 w-3.5" /> Core Architecture Index
             </h4>
@@ -78,7 +78,7 @@ export function BehindTheScenes() {
             {diagrams.map((diag) => (
               <div
                 key={diag.id}
-                className="group relative border border-slate-200 rounded-xl overflow-hidden bg-white transition-all duration-300 hover:border-slate-300 shadow-sm flex flex-col w-[450px] h-full"
+                className="group relative border border-slate-200 rounded-xl overflow-hidden bg-slate-100 transition-all duration-300 hover:border-slate-300 shadow-sm flex flex-col w-[450px] h-full"
               >
                 {/* Meta Panel Info */}
                 <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex justify-between items-start gap-4">
@@ -135,7 +135,7 @@ export function BehindTheScenes() {
               <div className="space-y-0.5">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold flex items-center gap-1.5">
                   <Move className="h-3 w-3 animate-pulse" /> Use scroll-wheel to
-                  zoom // click and hold canvas viewport grid background to pan
+                  zoom, click and hold canvas viewport grid background to pan
                 </span>
                 <h3 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wide">
                   {activeExpanded.title}
@@ -162,8 +162,8 @@ export function BehindTheScenes() {
                 colorMode="light"
               >
                 <Background color="#cbd5e1" gap={16} size={1.5} />
-                <Controls className="bg-white border border-slate-200 text-slate-600 rounded-lg overflow-hidden fill-slate-600 shadow-md" />
-                <MiniMap
+                {/* <Controls className="bg-white border border-slate-200 text-slate-600 rounded-lg overflow-hidden fill-slate-600 shadow-md" /> */}
+                {/* <MiniMap
                   style={{
                     background: "#f8fafc",
                     border: "1px solid #e2e8f0",
@@ -173,7 +173,7 @@ export function BehindTheScenes() {
                     (node.style?.borderColor as string) || "#cbd5e1"
                   }
                   maskColor="rgba(255, 255, 255, 0.5)"
-                />
+                /> */}
               </ReactFlow>
             </div>
           </div>
