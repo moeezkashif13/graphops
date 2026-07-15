@@ -6,7 +6,7 @@ const commonNodeStyles = {
   border: "2px solid #e2e8f0",
   borderRadius: "12px",
   padding: "12px",
-  fontFamily: "var(--font-mono, monospace)",
+  fontFamily: "var(--font-serif, monospace)",
   fontSize: "11px",
   textAlign: "center" as const,
   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",

@@ -1,4 +1,3 @@
-// src/components/Tour.tsx
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Sparkles, X } from "lucide-react";
 
@@ -12,16 +11,16 @@ interface TourStep {
 const TOUR_STEPS: TourStep[] = [
   {
     targetId: "ticket-queue-trigger",
-    title: "Step 1: Open the Simulation Panel",
+    title: "Open the simulator",
     content:
-      "Click the 'Open Simulation Panel' button in the header to simulate an inbound webhook stream.",
+      "Click 'Open simulator' in the header to fire a mock inbound webhook.",
     position: "bottom",
   },
   {
     targetId: "agent-graph-viewport",
-    title: "Step 2: Watch LangGraph Intercept Execution",
+    title: "Watch the graph intercept",
     content:
-      "Select your newly created ticket from the queue and observe how the backend state graph automatically halts at the human review checkpoint.",
+      "Select the new ticket and observe the graph pause at the human review checkpoint.",
     position: "step-2",
   },
 ];
@@ -29,61 +28,47 @@ const TOUR_STEPS: TourStep[] = [
 export default function Tour() {
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  // FIX 1: Changed 'right' to 'left' here to match what your calculations and inline styles use
   const [coords, setCoords] = useState({ top: 0, left: 0 });
-
-  // Use a ref for the current step to always have the latest value in polling loops
   const currentStepRef = useRef(currentStep);
   useEffect(() => {
     currentStepRef.current = currentStep;
   }, [currentStep]);
 
   useEffect(() => {
-    const hasTakenTour = localStorage.getItem("recruiter_tour_completed");
-    if (!hasTakenTour) {
-      const timer = setTimeout(() => setIsActive(true), 500);
-      return () => clearTimeout(timer);
+    if (!localStorage.getItem("recruiter_tour_completed")) {
+      const t = setTimeout(() => setIsActive(true), 500);
+      return () => clearTimeout(t);
     }
   }, []);
 
-  // Recalculate layout positions precisely using fixed coordinates
   const updatePosition = useCallback(() => {
     if (!isActive) return;
     const stepData = TOUR_STEPS[currentStepRef.current];
-    const element = document.getElementById(stepData.targetId);
-
-    if (element) {
-      const rect = element.getBoundingClientRect();
-
-      // If the element has no width/height or is hidden mid-animation, don't update to invalid coords
-      if (rect.width === 0 && rect.height === 0) return;
-
-      let top = rect.top;
-      let left = rect.left;
-
-      // Adjust coordinate placements based on orientation safely
-      if (stepData.position === "bottom") {
-        top += rect.height + 12;
-        left += rect.width / 2 - 160;
-      } else if (stepData.position === "top") {
-        top -= 170;
-        left += rect.width / 2 - 160;
-      } else if (stepData.position === "left") {
-        top += rect.height / 2 - 60;
-        left -= 320;
-      } else if (stepData.position === "right") {
-        top += rect.height / 2 - 60;
-        left += rect.width + 12;
-      } else if (stepData.position === "step-2") {
-        top += rect.height + 12;
-        left += rect.width - 330;
-      }
-
-      setCoords({ top, left });
+    const el = document.getElementById(stepData.targetId);
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) return;
+    let top = r.top,
+      left = r.left;
+    if (stepData.position === "bottom") {
+      top += r.height + 12;
+      left += r.width / 2 - 160;
+    } else if (stepData.position === "top") {
+      top -= 170;
+      left += r.width / 2 - 160;
+    } else if (stepData.position === "left") {
+      top += r.height / 2 - 60;
+      left -= 320;
+    } else if (stepData.position === "right") {
+      top += r.height / 2 - 60;
+      left += r.width + 12;
+    } else if (stepData.position === "step-2") {
+      top += r.height + 12;
+      left += r.width - 330;
     }
+    setCoords({ top, left });
   }, [isActive]);
 
-  // Handle position tracking adjustments on standard triggers
   useEffect(() => {
     updatePosition();
     window.addEventListener("resize", updatePosition);
@@ -94,52 +79,33 @@ export default function Tour() {
     };
   }, [updatePosition, currentStep]);
 
-  // FIX 2: Continuously poll positioning checks while active. This catches
-  // elements as they move during transitions/animations without requiring a browser reload.
   useEffect(() => {
     if (!isActive) return;
-
-    const intervalId = setInterval(() => {
-      updatePosition();
-    }, 50); // Checks every 50ms to ensure real-time attachment during slider animations
-
-    return () => clearInterval(intervalId);
+    const id = setInterval(updatePosition, 50);
+    return () => clearInterval(id);
   }, [isActive, updatePosition]);
 
-  // Intercept actual user target interaction actions to advance steps dynamically
   useEffect(() => {
     if (!isActive) return;
-
-    let attachedElement: HTMLElement | null = null;
-
-    const handleTargetClick = () => {
-      if (currentStepRef.current < TOUR_STEPS.length - 1) {
-        setCurrentStep((prev) => prev + 1);
-      } else {
-        handleClose();
-      }
+    let attached: HTMLElement | null = null;
+    const handle = () => {
+      if (currentStepRef.current < TOUR_STEPS.length - 1)
+        setCurrentStep((p) => p + 1);
+      else handleClose();
     };
-
-    // Keep looking for the target element until it maps onto the DOM tree
-    const finderInterval = setInterval(() => {
-      const currentStepData = TOUR_STEPS[currentStepRef.current];
-      const targetElement = document.getElementById(currentStepData.targetId);
-
-      if (targetElement && targetElement !== attachedElement) {
-        if (attachedElement) {
-          attachedElement.removeEventListener("click", handleTargetClick);
-        }
-        attachedElement = targetElement;
-        attachedElement.addEventListener("click", handleTargetClick);
+    const finder = setInterval(() => {
+      const s = TOUR_STEPS[currentStepRef.current];
+      const el = document.getElementById(s.targetId);
+      if (el && el !== attached) {
+        if (attached) attached.removeEventListener("click", handle);
+        attached = el;
+        attached.addEventListener("click", handle);
         updatePosition();
       }
     }, 100);
-
     return () => {
-      clearInterval(finderInterval);
-      if (attachedElement) {
-        attachedElement.removeEventListener("click", handleTargetClick);
-      }
+      clearInterval(finder);
+      if (attached) attached.removeEventListener("click", handle);
     };
   }, [isActive]);
 
@@ -147,44 +113,57 @@ export default function Tour() {
     setIsActive(false);
     localStorage.setItem("recruiter_tour_completed", "true");
   };
-
   if (!isActive) return null;
-
-  const currentStepData = TOUR_STEPS[currentStep];
+  const step = TOUR_STEPS[currentStep];
 
   return (
     <>
-      {/* Target Highlights Backdrop mask */}
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-[0.5px] z-40 pointer-events-none" />
-
-      {/* Floating Step Card */}
       <div
-        className="fixed z-50 w-[320px] p-4 rounded-xl border border-indigo-500/30 bg-white/95 text-slate-800 font-mono shadow-2xl transition-all duration-200 pointer-events-auto"
-        style={{ top: `${coords.top}px`, left: `${coords.left}px` }}
+        className="pointer-events-none fixed inset-0 z-40"
+        style={{
+          background: "rgba(26,26,46,0.45)",
+          backdropFilter: "blur(1px)",
+        }}
+      />
+      <div
+        className="fixed z-50 w-[320px] rounded-2xl border p-5 shadow-2xl transition-all"
+        style={{
+          top: coords.top,
+          left: coords.left,
+          background: "#faf7f2",
+          borderColor: "#0d5c63",
+        }}
       >
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1.5 text-indigo-400 text-[10px] uppercase font-bold tracking-wider">
-            <Sparkles className="h-3 w-3" />
-            Recruiter Guide ({currentStep + 1}/{TOUR_STEPS.length})
-          </div>
-          <button
-            onClick={handleClose}
-            className="text-slate-400 hover:text-slate-600"
+        <div className="mb-3 flex items-center justify-between">
+          <div
+            className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.18em]"
+            style={{ color: "#e07856" }}
           >
+            <Sparkles className="h-3 w-3" /> Guide · {currentStep + 1}/
+            {TOUR_STEPS.length}
+          </div>
+          <button onClick={handleClose} style={{ color: "#6b6b7d" }}>
             <X className="h-4 w-4" />
           </button>
         </div>
-
-        <h4 className="text-xs font-bold text-slate-900 mb-1.5 uppercase tracking-wide">
-          {currentStepData.title}
+        <h4
+          className="font-serif text-xl leading-tight"
+          style={{ color: "#1a1a2e" }}
+        >
+          {step.title}
         </h4>
-        <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
-          {currentStepData.content}
+        <p
+          className="mt-2 text-[12.5px] leading-relaxed"
+          style={{ color: "#3a3a52" }}
+        >
+          {step.content}
         </p>
-
-        <div className="flex items-center justify-between pt-2 mt-3 border-t border-slate-200">
-          <span className="text-[9px] uppercase text-amber-600/80 font-semibold animate-pulse">
-            ⚡ Perform action to advance
+        <div className="mt-4 border-t pt-3" style={{ borderColor: "#e6dfd1" }}>
+          <span
+            className="text-[10px] font-medium uppercase tracking-wider animate-pulse"
+            style={{ color: "#d4a147" }}
+          >
+            → Perform action to advance
           </span>
         </div>
       </div>

@@ -1,6 +1,4 @@
 import { ScrollArea } from "./ui/scroll-area";
-import { Badge } from "./ui/badge";
-import { Card, CardContent } from "./ui/card";
 import { AlertCircle, CheckCircle2, Clock, ShieldAlert } from "lucide-react";
 
 export interface Ticket {
@@ -20,111 +18,142 @@ interface TicketQueueProps {
   onSelectTicket: (id: string) => void;
 }
 
+const sentimentTone = (s: Ticket["sentiment"]) => {
+  switch (s) {
+    case "URGENT_CHURN":
+      return {
+        label: "Churn risk",
+        bg: "#f6e5e5",
+        fg: "#a63d40",
+        Icon: ShieldAlert,
+      };
+    case "ANGRY":
+      return {
+        label: "Angry",
+        bg: "#fbeae2",
+        fg: "#c05a30",
+        Icon: AlertCircle,
+      };
+    default:
+      return { label: "Neutral", bg: "#ecf1ea", fg: "#4a6a48", Icon: null };
+  }
+};
+
+const statusIcon = (s: Ticket["status"]) => {
+  switch (s) {
+    case "processing":
+      return (
+        <Clock className="h-4 w-4 animate-pulse" style={{ color: "#0d5c63" }} />
+      );
+    case "pending_approval":
+      return <AlertCircle className="h-4 w-4" style={{ color: "#d4a147" }} />;
+    case "resolved":
+      return <CheckCircle2 className="h-4 w-4" style={{ color: "#7a9b76" }} />;
+    default:
+      return <AlertCircle className="h-4 w-4" style={{ color: "#a63d40" }} />;
+  }
+};
+
 export function TicketQueue({
   tickets,
   selectedTicketId,
   onSelectTicket,
 }: TicketQueueProps) {
-  const getSentimentBadge = (sentiment: Ticket["sentiment"]) => {
-    switch (sentiment) {
-      case "URGENT_CHURN":
-        return (
-          <Badge className="bg-red-500/10 text-red-400 border border-red-500/20 text-[10px] gap-1 hover:bg-red-500/20">
-            <ShieldAlert className="h-3 w-3" /> Churn Risk
-          </Badge>
-        );
-      case "ANGRY":
-        return (
-          <Badge className="bg-orange-500/10 text-orange-400 border border-orange-500/20 text-[10px] gap-1 hover:bg-orange-500/20">
-            <AlertCircle className="h-3 w-3" /> Angry
-          </Badge>
-        );
-      default:
-        return (
-          <Badge className="bg-slate-100 text-slate-600 border border-slate-200 text-[10px] hover:bg-slate-100">
-            Neutral
-          </Badge>
-        );
-    }
-  };
-
-  const getStatusIcon = (status: Ticket["status"]) => {
-    switch (status) {
-      case "processing":
-        return <Clock className="h-4 w-4 text-indigo-400 animate-pulse" />;
-      case "pending_approval":
-        return <AlertCircle className="h-4 w-4 text-amber-400" />;
-      case "resolved":
-        return <CheckCircle2 className="h-4 w-4 text-emerald-400" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-rose-500" />;
-    }
-  };
-
   return (
-    // Fixed: Force strict maximum heights and block native window overflows
-    <div className="w-full h-full max-h-full flex flex-col overflow-hidden bg-slate-50">
-      {/* Header Context Section */}
-      <div className="p-4 border-b border-slate-200 bg-slate-50 backdrop-blur-sm shrink-0">
-        <h2 className="font-semibold text-sm tracking-tight text-slate-900">
-          Inbound Triage Engine
+    <div
+      className="flex h-full max-h-full w-full flex-col overflow-hidden"
+      style={{ background: "#faf7f2" }}
+    >
+      <div
+        className="shrink-0 border-b px-6 py-5"
+        style={{ borderColor: "#e6dfd1" }}
+      >
+        <span
+          className="text-[11px] font-medium uppercase tracking-[0.18em]"
+          style={{ color: "#e07856" }}
+        >
+          Inbound
+        </span>
+        <h2
+          className="mt-1 font-serif text-3xl leading-none"
+          style={{ color: "#1a1a2e" }}
+        >
+          Triage queue
         </h2>
-        <p className="text-[11px] text-slate-500 font-mono tracking-wider mt-0.5">
+        <p className="mt-1.5 text-[12px]" style={{ color: "#6b6b7d" }}>
           Real-time asynchronous streams
         </p>
       </div>
 
-      {/* Stream Queue Item List */}
-      {/* Fixed: Added min-h-0 so flexbox allows the container to shrink and scroll rather than overflow */}
-      <div className="flex-1 min-h-0 w-full">
-        <ScrollArea className="h-full w-full p-3 custom-scrollbar">
-          <div className="space-y-2 pb-6">
+      <div className="min-h-0 w-full flex-1">
+        <ScrollArea className="custom-scrollbar h-full w-full p-4">
+          <div className="space-y-2.5 pb-6">
             {tickets.map((ticket) => {
               const isSelected = selectedTicketId === ticket.id;
+              const tone = sentimentTone(ticket.sentiment);
               return (
-                <Card
+                <button
                   key={ticket.id}
-                  className={`cursor-pointer transition-all duration-200 border bg-white backdrop-blur-sm ring-0 ${
-                    isSelected
-                      ? "border-indigo-500 bg-indigo-50/50 shadow-sm shadow-indigo-500/10 "
-                      : "border-slate-200 hover:border-slate-300 hover:bg-slate-50 "
-                  }`}
                   onClick={() => onSelectTicket(ticket.id)}
+                  className="w-full rounded-2xl border p-4 text-left transition-all"
+                  style={{
+                    background: isSelected ? "#fff" : "#fff",
+                    borderColor: isSelected ? "#0d5c63" : "#e6dfd1",
+                    boxShadow: isSelected
+                      ? "0 6px 24px -14px rgba(13,92,99,0.5)"
+                      : "none",
+                  }}
                 >
-                  <CardContent className="p-3.5 space-y-2.5">
-                    <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className="truncate text-[13px] font-medium"
+                      style={{ color: isSelected ? "#0d5c63" : "#1a1a2e" }}
+                    >
+                      {ticket.sender}
+                    </span>
+                    <div className="flex shrink-0 items-center gap-2">
                       <span
-                        className={`text-xs font-mono font-medium truncate ${
-                          isSelected ? "text-indigo-600" : "text-slate-700"
-                        }`}
+                        className="font-serif text-[10px]"
+                        style={{ color: "#6b6b7d" }}
                       >
-                        {ticket.sender}
+                        {ticket.timestamp}
                       </span>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[10px] font-mono text-slate-500">
-                          {ticket.timestamp}
-                        </span>
-                        {getStatusIcon(ticket.status)}
-                      </div>
+                      {statusIcon(ticket.status)}
                     </div>
+                  </div>
 
-                    <p className="text-xs text-slate-600 line-clamp-2 font-normal leading-relaxed">
-                      {ticket.body}
-                    </p>
+                  <p
+                    className="mt-2 line-clamp-2 text-[12.5px] leading-relaxed"
+                    style={{ color: "#3a3a52" }}
+                  >
+                    {ticket.body}
+                  </p>
 
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {ticket.sentiment && getSentimentBadge(ticket.sentiment)}
-                      {ticket.category?.map((cat) => (
-                        <Badge
-                          key={cat}
-                          className="bg-slate-50 text-slate-600 border border-slate-200 text-[10px] uppercase font-semibold tracking-wider font-mono"
-                        >
-                          {cat}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                    {ticket.sentiment && (
+                      <span
+                        className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                        style={{ background: tone.bg, color: tone.fg }}
+                      >
+                        {tone.Icon && <tone.Icon className="h-2.5 w-2.5" />}
+                        {tone.label}
+                      </span>
+                    )}
+                    {ticket.category?.map((c) => (
+                      <span
+                        key={c}
+                        className="rounded-full border px-2 py-0.5 font-serif text-[10px] uppercase tracking-wider"
+                        style={{
+                          borderColor: "#e6dfd1",
+                          color: "#6b6b7d",
+                          background: "#faf7f2",
+                        }}
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </button>
               );
             })}
           </div>

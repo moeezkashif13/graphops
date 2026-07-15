@@ -5,34 +5,37 @@ import { Sparkles, Terminal } from "lucide-react";
 
 export function ModeToggle() {
   const dispatch = useDispatch();
-  const isRecruiterMode = useSelector(
-    (state: RootState) => state.eli5.isRecruiterMode,
-  );
+  const isRecruiterMode = useSelector((s: RootState) => s.eli5.isRecruiterMode);
+
+  const base =
+    "flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-wider transition-all cursor-pointer";
 
   return (
-    <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 p-0.5 rounded-lg shadow-inner shrink-0">
+    <div
+      className="flex items-center gap-1 rounded-full border p-1"
+      style={{ borderColor: "#e6dfd1", background: "#faf7f2" }}
+    >
       <button
         onClick={() => isRecruiterMode && dispatch(toggleRecruiterMode())}
-        className={`flex items-center cursor-pointer gap-1.5 px-2.5 py-1 text-[10px] font-mono font-bold tracking-wider uppercase rounded-md transition-all duration-150 ${
+        className={base}
+        style={
           !isRecruiterMode
-            ? "bg-indigo-600 text-white shadow-md"
-            : "text-slate-500 hover:text-slate-700"
-        }`}
+            ? { background: "#0d5c63", color: "#fff" }
+            : { color: "#6b6b7d", background: "transparent" }
+        }
       >
-        <Terminal className="h-3 w-3" />
-        Technical View
+        <Terminal className="h-3 w-3" /> Technical
       </button>
-
       <button
         onClick={() => !isRecruiterMode && dispatch(toggleRecruiterMode())}
-        className={`flex items-center cursor-pointer gap-1.5 px-2.5 py-1 text-[10px] font-mono font-bold tracking-wider uppercase rounded-md transition-all duration-150 ${
+        className={base}
+        style={
           isRecruiterMode
-            ? "bg-amber-500 text-slate-950 shadow-md"
-            : "text-slate-500 hover:text-slate-700"
-        }`}
+            ? { background: "#e07856", color: "#fff" }
+            : { color: "#6b6b7d", background: "transparent" }
+        }
       >
-        <Sparkles className="h-3 w-3" />
-        Recruiter Mode
+        <Sparkles className="h-3 w-3" /> Plain english
       </button>
     </div>
   );

@@ -2,13 +2,17 @@ import { useState } from "react";
 
 const mockTemplates = [
   {
-    label: "Angry Technical Issue (Triggers Human-in-the-Loop)",
+    label: "Angry technical issue",
+    hint: "Triggers human-in-the-loop",
+    tone: "#a63d40",
     body: "I am extremely frustrated! Your real-time document sync sessions keep disconnecting constantly. Our team is facing critical delivery blockers due to your Nginx proxy socket layer timing out. Fix this immediately!",
     sender: "frustrated_client@enterprise.com",
   },
   {
-    label: "Billing Mismatch (Triggers Stripe RAG Path)",
-    body: "Hello, I am writing because my premium tier invoice shows an extra charge of $50 that was supposed to be a promotional ledger credit. Please check my billing history and adjust this back to zero.",
+    label: "Billing mismatch",
+    hint: "Triggers Stripe RAG path",
+    tone: "#d4a147",
+    body: "Hello, my premium tier invoice shows an extra $50 charge that was supposed to be a promotional credit. Please check my billing history and adjust this back to zero.",
     sender: "finance_lead@startup.co",
   },
 ];
@@ -26,7 +30,7 @@ export function Simulator({
   const [customBody, setCustomBody] = useState("");
   const [customSender, setCustomSender] = useState("recruiter_test@hiring.com");
 
-  const triggerSimulation = async (sender, body) => {
+  const triggerSimulation = async (sender: string, body: string) => {
     if (!body.trim()) return;
     setLoading(true);
     try {
@@ -38,15 +42,10 @@ export function Simulator({
           body: JSON.stringify({ sender, body }),
         },
       );
-
-      // ADDED: Parse response payload to retrieve the generated id
       if (res.ok) {
         const data = await res.json();
-        if (data?.id && onTicketCreated) {
-          onTicketCreated(data.id);
-        }
+        if (data?.id && onTicketCreated) onTicketCreated(data.id);
       }
-
       if (body === customBody) setCustomBody("");
     } catch (err) {
       console.error("Simulation trigger failed", err);
@@ -57,67 +56,106 @@ export function Simulator({
   };
 
   return (
-    <div className="p-5 bg-white border border-slate-200 rounded-xl mb-6 shadow-sm">
-      <h3 className="text-sm font-semibold text-slate-900 mb-2 flex items-center gap-2">
-        Live Pipeline Simulation Playground
-      </h3>
-      <p className="text-xs text-slate-500 mb-4">
-        Test the real-time AI engine. Use a pre-configured scenario or type any
-        custom request to see the LangGraph state machine categorize, search,
-        and pause live.
-      </p>
-
-      {/* --- Section A: Quick Presets --- */}
-      <div id="agent-graph-viewport" className="mb-4">
-        <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">
-          Option 1: Quick Presets
+    <div className="space-y-6">
+      <div>
+        <span
+          className="text-[11px] font-medium uppercase tracking-[0.18em]"
+          style={{ color: "#e07856" }}
+        >
+          Playground
         </span>
-        <div className="flex flex-col gap-2">
-          {mockTemplates.map((tmpl, idx) => (
+        <h3
+          className="mt-1 font-serif text-3xl leading-none"
+          style={{ color: "#1a1a2e" }}
+        >
+          Simulate a ticket
+        </h3>
+        <p
+          className="mt-2 text-sm leading-relaxed"
+          style={{ color: "#6b6b7d" }}
+        >
+          Test the live pipeline with a preset scenario or type your own
+          request.
+        </p>
+      </div>
+
+      <div id="agent-graph-viewport">
+        <span
+          className="text-[11px] font-medium uppercase tracking-[0.18em]"
+          style={{ color: "#1a1a2e" }}
+        >
+          Presets
+        </span>
+        <div className="mt-3 flex flex-col gap-2.5">
+          {mockTemplates.map((t, i) => (
             <button
-              key={idx}
+              key={i}
               disabled={loading}
-              onClick={() => {
-                triggerSimulation(tmpl.sender, tmpl.body);
-              }}
-              className="text-left cursor-pointer text-xs bg-slate-50 hover:bg-slate-100/80 text-slate-700 p-2.5 rounded-lg border border-slate-200/80 transition-all duration-150 disabled:opacity-50"
+              onClick={() => triggerSimulation(t.sender, t.body)}
+              className="group flex flex-col items-start gap-1 rounded-xl border p-3.5 text-left transition-all disabled:opacity-50"
+              style={{ background: "#fff", borderColor: "#e6dfd1" }}
             >
-              {tmpl.label}
+              <div className="flex w-full items-center gap-2">
+                <span
+                  className="h-2 min-w-2 rounded-full"
+                  style={{ background: t.tone }}
+                />
+                <span
+                  className="text-[13px] font-medium"
+                  style={{ color: "#1a1a2e" }}
+                >
+                  {t.label}
+                </span>
+              </div>
+              <span className="pl-3.5 text-[11px]" style={{ color: "#6b6b7d" }}>
+                {t.hint}
+              </span>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="border-t border-slate-200 my-4"></div>
+      <div className="h-px w-full" style={{ background: "#e6dfd1" }} />
 
-      {/* --- Section B: Custom Free-Form Input --- */}
       <div>
-        <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">
-          Option 2: Custom Live Input (No Strings Attached)
+        <span
+          className="text-[11px] font-medium uppercase tracking-[0.18em]"
+          style={{ color: "#1a1a2e" }}
+        >
+          Custom input
         </span>
-        <div className="flex flex-col gap-3">
+        <div className="mt-3 flex flex-col gap-3">
           <input
             type="email"
             value={customSender}
             onChange={(e) => setCustomSender(e.target.value)}
-            placeholder="Sender Email Address"
-            className="bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 transition"
+            placeholder="Sender email"
+            className="rounded-xl border px-3 py-2.5 text-[13px] transition focus:outline-none"
+            style={{
+              background: "#fff",
+              borderColor: "#e6dfd1",
+              color: "#1a1a2e",
+            }}
           />
           <textarea
-            rows={8}
+            rows={7}
             value={customBody}
             onChange={(e) => setCustomBody(e.target.value)}
-            placeholder="Type anything here... Try writing an angry complaint or a simple technical question to watch the vector database trigger."
-            className="bg-slate-50 border border-slate-200 placeholder:text-slate-400 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-indigo-500 resize-none transition"
+            placeholder="Type an angry complaint or a billing question and watch the graph trigger…"
+            className="resize-none rounded-xl border px-3 py-2.5 text-[13px] leading-relaxed transition focus:outline-none"
+            style={{
+              background: "#fff",
+              borderColor: "#e6dfd1",
+              color: "#1a1a2e",
+            }}
           />
           <button
             disabled={loading || !customBody.trim()}
             onClick={() => triggerSimulation(customSender, customBody)}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed text-center"
+            className="rounded-xl px-4 py-2.5 text-[13px] font-medium text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: "#0d5c63" }}
           >
-            {loading
-              ? "Processing Dynamic Graph Loop..."
-              : "Inject Custom Webhook"}
+            {loading ? "Processing…" : "Inject webhook"}
           </button>
         </div>
       </div>

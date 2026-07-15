@@ -1,13 +1,11 @@
-// src/App.tsx
 import { useState, useEffect } from "react";
 import { TicketQueue } from "../components/TicketQueue";
 import { Simulator } from "../components/Simulator";
 import { AgentWorkspace } from "../components/AgentWorkspace";
 import { BehindTheScenes } from "../components/BehindTheScenes";
 import Tour from "../components/Tour";
-import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { Keyboard, Layers, Loader2, Terminal, User } from "lucide-react";
+import { Keyboard, Layers, Loader2, Terminal, User, X } from "lucide-react";
 import {
   useGetTicketsQuery,
   useGetGraphStateQuery,
@@ -20,33 +18,23 @@ export default function App() {
   const [isSimOpen, setIsSimOpen] = useState(false);
   const [isBtsOpen, setIsBtsOpen] = useState(false);
 
-  // 1. Fetch live queue with automatic loading states and polling/caching
   const { data: tickets = [], isLoading: loadingQueue } = useGetTicketsQuery();
-
-  // 2. Fetch the graph state checkpoint dynamically whenever a ticket is highlighted
-  // ADDED: refetchOnMountOrArgChange forces RTK Query to check the server for fresh data
   const { data: graphState, refetch: refetchGraphState } =
     useGetGraphStateQuery(selectedTicketId ?? "", {
       skip: !selectedTicketId,
       refetchOnMountOrArgChange: true,
     });
-
-  // 3. Destructure resume/reject mutations
   const [resumeGraph] = useResumeGraphEngineMutation();
   const [rejectGraph] = useRejectGraphEngineMutation();
-
   const activeTicket = tickets.find((t) => t.id === selectedTicketId) || null;
 
-  // FORCE FIX: Automatically trigger a fresh server pull the moment the active
-  // ticket changes state (e.g. from background 'processing' to 'pending_approval')
   useEffect(() => {
     if (
       selectedTicketId &&
       activeTicket &&
       activeTicket.status !== "processing"
-    ) {
+    )
       refetchGraphState();
-    }
   }, [selectedTicketId, activeTicket?.status, refetchGraphState]);
 
   const handleApproveAndResume = async (finalDraft: string) => {
@@ -54,63 +42,86 @@ export default function App() {
     try {
       await resumeGraph({ ticketId: selectedTicketId, finalDraft }).unwrap();
     } catch (err) {
-      console.error(
-        "Failed to unpause the target LangGraph engine state:",
-        err,
-      );
+      console.error("Failed to resume:", err);
     }
   };
-
   const handleRejectWorkflow = async () => {
     if (!selectedTicketId) return;
     await rejectGraph(selectedTicketId).unwrap();
   };
 
-  const handleSelectTicket = (id: string) => {
-    setSelectedTicketId(id);
-  };
-
-  // Convert the graph object parameters into sequential text arrays
   const derivedLogs = graphState
     ? [
-        `Analyzing State Checkpoint for Thread Context: ${selectedTicketId}`,
-        `Extracted Metadata Categories: [${graphState.categories.join(", ")}]`,
-        `Sentiment Evaluated: ${graphState.sentiment}`,
+        `Analyzing state checkpoint for thread: ${selectedTicketId}`,
+        `Extracted categories: [${graphState.categories.join(", ")}]`,
+        `Sentiment: ${graphState.sentiment}`,
         graphState.requiresHumanReview && !graphState.humanApproved
-          ? "Condition Target Met: [requiresHumanReview = true] -> Graph Execution Interrupted. Awaiting human input."
-          : "Graph processing successfully finalized.",
+          ? "Condition met: requiresHumanReview = true → graph interrupted, awaiting human input."
+          : "Graph processing finalized.",
       ]
-    : ["Select an inbound queue option to unpack execution logs..."];
+    : ["Select an inbound ticket to unpack execution logs…"];
 
   return (
     <>
-      <div className="h-screen w-screen flex flex-col overflow-hidden font-sans bg-slate-50 text-slate-800 antialiased">
-        {/* ─── Premium Modern Header ─── */}
-        <header className="h-16 border-b border-slate-200 bg-white/70 backdrop-blur-md flex items-center justify-between px-6 z-20 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-600/10 rounded-lg border border-indigo-500/20">
-              <Layers className="h-5 w-5 text-indigo-400 stroke-[2]" />
+      <div
+        className="flex h-screen w-screen flex-col overflow-hidden antialiased font-sans"
+        style={{
+          background: "#faf7f2",
+          color: "#1a1a2e",
+        }}
+      >
+        {/* HEADER */}
+        <header
+          className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b px-6 py-4 sm:flex sm:justify-between"
+          style={{ borderColor: "#e6dfd1", background: "#fff" }}
+        >
+          <div className="flex min-w-0 items-center gap-3">
+            <div
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
+              style={{ background: "#0d5c63" }}
+            >
+              <Layers className="h-5 w-5 text-white" strokeWidth={2} />
             </div>
-            <div className="flex flex-col">
-              <span className="font-semibold text-sm tracking-tight text-slate-900">
-                GraphOps Control Panel
-              </span>
+            <div className="min-w-0">
+              <div
+                className="truncate font-serif text-2xl leading-none"
+                style={{ color: "#1a1a2e" }}
+              >
+                GraphOps
+              </div>
+              <div
+                className="mt-1 flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em]"
+                style={{ color: "#6b6b7d" }}
+              >
+                <span
+                  className="h-1.5 w-1.5 animate-pulse rounded-full"
+                  style={{ background: "#7a9b76" }}
+                />
+                Agent engine online
+              </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
+              asChild
               variant="outline"
               size="sm"
-              className=" cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all p-0!"
+              className="gap-2 border text-[12px] font-medium"
+              style={{
+                borderColor: "#e6dfd1",
+                background: "#faf7f2",
+                color: "#1a1a2e",
+              }}
             >
               <a
                 href="https://abdulmoeez.online"
                 target="_blank"
-                className="px-2.5 flex items-center h-full gap-2 "
+                rel="noreferrer"
+                className="flex items-center gap-2 px-2.5"
               >
-                <User className="h-4 w-4 text-indigo-400" />
-                <p>View Portfolio</p>
+                <User className="h-4 w-4" style={{ color: "#e07856" }} />{" "}
+                Portfolio
               </a>
             </Button>
             <Button
@@ -120,56 +131,59 @@ export default function App() {
                 setIsBtsOpen(!isBtsOpen);
                 setIsSimOpen(false);
               }}
-              className="flex items-center cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
+              className="gap-2 text-[12px] font-medium"
+              style={{
+                borderColor: "#e6dfd1",
+                background: "#faf7f2",
+                color: "#1a1a2e",
+              }}
             >
-              <Terminal className="h-4 w-4 text-indigo-400" />
-              {isBtsOpen ? "Hide Behind The Scenes" : "View Behind The Scenes"}
+              <Terminal className="h-4 w-4" style={{ color: "#d4a147" }} />
+              {isBtsOpen ? "Hide architecture" : "Architecture"}
             </Button>
             <Button
-              variant="outline"
               size="sm"
               id="ticket-queue-trigger"
               onClick={() => {
                 setIsBtsOpen(false);
                 setIsSimOpen(!isSimOpen);
               }}
-              className="flex items-center cursor-pointer gap-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs transition-all"
+              className="gap-2 text-[12px] font-medium text-white"
+              style={{ background: "#e07856" }}
             >
-              <Keyboard className="h-4 w-4 text-indigo-400" />
-              {isSimOpen ? "Hide Simulator" : "Open Simulation Panel"}
+              <Keyboard className="h-4 w-4" />
+              {isSimOpen ? "Close simulator" : "Open simulator"}
             </Button>
-            <Badge
-              variant="outline"
-              className="text-xs bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-2.5 py-0.5 font-mono shadow-sm animate-pulse"
-            >
-              • Agent Engine Online
-            </Badge>
           </div>
         </header>
 
-        {/* ─── Main Content Container ─── */}
-        <div className="flex flex-1 overflow-hidden relative">
-          {/* Left Hand Queue Panel */}
-          <div className="w-96 border-r border-slate-200 h-full flex flex-col bg-slate-100/30 shrink-0">
+        {/* MAIN */}
+        <div className="relative flex flex-1 overflow-hidden">
+          {/* Queue */}
+          <aside
+            className="flex h-full w-96 shrink-0 flex-col border-r"
+            style={{ borderColor: "#e6dfd1" }}
+          >
             {loadingQueue ? (
-              <div className="flex-1 flex items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />
+              <div className="flex flex-1 items-center justify-center">
+                <Loader2
+                  className="h-6 w-6 animate-spin"
+                  style={{ color: "#0d5c63" }}
+                />
               </div>
             ) : (
               <TicketQueue
                 tickets={tickets}
                 selectedTicketId={selectedTicketId}
-                onSelectTicket={handleSelectTicket}
+                onSelectTicket={setSelectedTicketId}
               />
             )}
-          </div>
+          </aside>
 
-          {/* Central Core Agent Workflow Canvas */}
-          <main
-            className={`flex-1 ${!activeTicket ? "flex items-center" : ""} bg-slate-50/50 custom-scrollbar p-1`}
-          >
+          {/* Workspace */}
+          <main className="flex-1 overflow-hidden">
             <AgentWorkspace
-              key={selectedTicketId} // FORCE FIX: Destroys & completely resets workspace states on switch
+              key={selectedTicketId}
               ticket={activeTicket}
               graphLogs={derivedLogs}
               currentDraft={graphState?.draftResponse || null}
@@ -178,38 +192,37 @@ export default function App() {
             />
           </main>
 
-          {/* Behind The Scenes Panel Start*/}
+          {/* BTS overlay */}
           <div
-            className={`absolute top-0 right-0 h-full w-full bg-black/85 shadow-2xl z-50 transition duration-300 ease-in-out flex flex-col ${
-              isBtsOpen ? " translate-x-0" : " translate-x-full"
-            }`}
+            className={`absolute inset-0 z-40 transition-transform duration-300 ease-in-out ${isBtsOpen ? "translate-x-0" : "translate-x-full"}`}
           >
-            <BehindTheScenes
-            // isOpen={isBtsOpen}
-            // onClose={() => setIsBtsOpen(false)}
-            />
+            <BehindTheScenes />
           </div>
-          {/* Behind The Scenes Panel End */}
 
+          {/* Simulator drawer */}
           <div
-            className={`absolute top-0 right-0 h-full w-[420px] bg-white border-l border-slate-200 shadow-2xl z-30 transform transition-transform duration-300 ease-in-out flex flex-col ${
-              isSimOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`absolute top-0 right-0 z-30 flex h-full w-[440px] max-w-full flex-col border-l shadow-2xl transition-transform duration-300 ease-in-out ${isSimOpen ? "translate-x-0" : "translate-x-full"}`}
+            style={{ background: "#faf7f2", borderColor: "#e6dfd1" }}
           >
-            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-              <span className="text-xs font-bold font-mono tracking-wider text-slate-500 uppercase">
-                Pipeline Testing Playground
-              </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsSimOpen(false)}
-                className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 text-xs px-2 h-7"
+            <div
+              className="flex items-center justify-between border-b px-5 py-4"
+              style={{ borderColor: "#e6dfd1", background: "#fff" }}
+            >
+              <span
+                className="text-[11px] font-medium uppercase tracking-[0.18em]"
+                style={{ color: "#6b6b7d" }}
               >
-                ✕ Close
-              </Button>
+                Pipeline playground
+              </span>
+              <button
+                onClick={() => setIsSimOpen(false)}
+                className="grid h-7 w-7 place-items-center rounded-full transition-colors"
+                style={{ color: "#6b6b7d", background: "#faf7f2" }}
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+            <div className="custom-scrollbar flex-1 overflow-y-auto p-6">
               <Simulator
                 toggleSimulator={setIsSimOpen}
                 onTicketCreated={(id) => setSelectedTicketId(id)}
@@ -218,7 +231,6 @@ export default function App() {
           </div>
         </div>
       </div>
-
       <Tour />
     </>
   );

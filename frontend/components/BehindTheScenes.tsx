@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { X, Layers, Cpu, Maximize2, Move } from "lucide-react";
-import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react";
+import { X, Cpu, Maximize2, Move } from "lucide-react";
+import { ReactFlow, Background } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-
 import {
   topologyNodes,
   topologyEdges,
@@ -13,7 +12,6 @@ import {
 } from "../src/utils/flowdata";
 
 type DiagramKey = "topology" | "stateGraph" | "hitlSequence";
-
 interface DiagramSpec {
   id: DiagramKey;
   title: string;
@@ -30,25 +28,24 @@ export function BehindTheScenes() {
   const diagrams: DiagramSpec[] = [
     {
       id: "topology",
-      title: "01 Infrastructure Topology Map",
+      title: "Infrastructure topology",
       description:
-        "Macro end-to-end trace payload mapping from client to NestJS routing and pgvector layers.",
+        "End-to-end payload trace from client through NestJS to pgvector.",
       nodes: topologyNodes,
       edges: topologyEdges,
     },
     {
       id: "stateGraph",
-      title: "02 LangGraph State Machine Loop",
+      title: "LangGraph state loop",
       description:
-        "Isolated logical state node layout mapping decision channels and evaluation edges.",
+        "Isolated logical nodes mapping decision channels and evaluation edges.",
       nodes: graphNodes,
       edges: graphEdges,
     },
     {
       id: "hitlSequence",
-      title: "03 Human-in-the-Loop Serialization Matrix",
-      description:
-        "Step-by-step chronology displaying how threads freeze, store snapshots, and wake up upon override actions.",
+      title: "Human-in-the-loop sequence",
+      description: "How threads freeze, snapshot, and resume on override.",
       nodes: sequenceNodes,
       edges: sequenceEdges,
     },
@@ -56,50 +53,80 @@ export function BehindTheScenes() {
 
   return (
     <>
-      {/* Backdrop overlay */}
-
-      {/* Structural drawer layout viewport */}
-      <div>
-        {/* Content Lists */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5 custom-scrollbar ">
-          <div className="p-4 rounded-xl border border-indigo-500/20 bg-slate-100 space-y-1.5 shrink-0">
-            <h4 className="text-xs font-bold font-mono text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
-              <Cpu className="h-3.5 w-3.5" /> Core Architecture Index
-            </h4>
-            <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
-              Select an architecture layer category from the panel configuration
-              indexes below to open an interactive full-screen viewport
-              environment.
+      <div
+        className="h-full w-full overflow-y-auto p-8"
+        style={{ background: "#1a1a2e" }}
+      >
+        <div className="mx-auto max-w-6xl space-y-6">
+          <div
+            className="rounded-2xl border p-6"
+            style={{ borderColor: "#3a3a52", background: "#232340" }}
+          >
+            <div
+              className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ color: "#d4a147" }}
+            >
+              <Cpu className="h-3.5 w-3.5" /> Architecture index
+            </div>
+            <h2
+              className="mt-2 font-serif text-4xl"
+              style={{ color: "#faf7f2" }}
+            >
+              Behind the scenes
+            </h2>
+            <p
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: "#c9c0ad" }}
+            >
+              Pick an architecture layer to open the interactive canvas.
             </p>
           </div>
 
-          {/* Map Grid Lists Rendering all 3 Diagrams */}
-          <div className="gap-4 flex flex-wrap justify-between">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {diagrams.map((diag) => (
               <div
                 key={diag.id}
-                className="group relative border border-slate-200 rounded-xl overflow-hidden bg-slate-100 transition-all duration-300 hover:border-slate-300 shadow-sm flex flex-col w-[450px] h-full"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border transition-all"
+                style={{ borderColor: "#3a3a52", background: "#faf7f2" }}
               >
-                {/* Meta Panel Info */}
-                <div className="p-3 bg-slate-50/50 border-b border-slate-100 flex justify-between items-start gap-4">
-                  <div className="space-y-0.5">
-                    <h5 className="text-[11px] font-mono font-bold text-slate-800 uppercase tracking-wide">
+                <div
+                  className="flex items-start justify-between gap-4 border-b p-4"
+                  style={{ borderColor: "#e6dfd1" }}
+                >
+                  <div>
+                    <h5
+                      className="font-serif text-xl leading-tight"
+                      style={{ color: "#1a1a2e" }}
+                    >
                       {diag.title}
                     </h5>
-                    <p className="text-[10px] text-slate-500 font-sans leading-normal">
+                    <p
+                      className="mt-1 text-[12px] leading-normal"
+                      style={{ color: "#6b6b7d" }}
+                    >
                       {diag.description}
                     </p>
                   </div>
                   <button
                     onClick={() => setActiveExpanded(diag)}
-                    className="flex items-center gap-1.5 px-2 py-1 text-[9px] font-mono font-bold uppercase text-indigo-400 border border-indigo-500/20 bg-indigo-500/[0.03] rounded-md transition-all group-hover:bg-indigo-600 group-hover:text-white shadow-sm shrink-0"
+                    className="flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[10px] font-medium uppercase tracking-wider transition-all group-hover:text-white"
+                    style={{ borderColor: "#0d5c63", color: "#0d5c63" }}
+                    onMouseEnter={(e) => (
+                      (e.currentTarget.style.background = "#0d5c63"),
+                      (e.currentTarget.style.color = "#fff")
+                    )}
+                    onMouseLeave={(e) => (
+                      (e.currentTarget.style.background = "transparent"),
+                      (e.currentTarget.style.color = "#0d5c63")
+                    )}
                   >
-                    <Maximize2 className="h-3 w-3" />
-                    Open Canvas
+                    <Maximize2 className="h-3 w-3" /> Open
                   </button>
                 </div>
-
-                <div className="h-[250px] bg-slate-50/30 relative pointer-events-none transition-opacity">
+                <div
+                  className="pointer-events-none relative h-[240px]"
+                  style={{ background: "#fff" }}
+                >
                   <ReactFlow
                     nodes={diag.nodes}
                     edges={diag.edges}
@@ -110,7 +137,7 @@ export function BehindTheScenes() {
                     zoomOnScroll={false}
                     panOnDrag={false}
                   >
-                    <Background color="#cbd5e1" gap={12} size={1} />
+                    <Background color="#e6dfd1" gap={14} size={1} />
                   </ReactFlow>
                 </div>
               </div>
@@ -119,39 +146,51 @@ export function BehindTheScenes() {
         </div>
       </div>
 
-      {/* --- 90% SCREEN WORKSPACE INTERACTIVE MODAL CANVAS --- */}
       {activeExpanded && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10">
-          {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+            className="absolute inset-0 backdrop-blur-md"
+            style={{ background: "rgba(26,26,46,0.7)" }}
             onClick={() => setActiveExpanded(null)}
           />
-
-          {/* Main Display Core Canvas Container */}
-          <div className="relative w-full h-[85vh] md:h-[90vh] bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
-            {/* Control Strip Top Header Info */}
-            <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between z-10">
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold flex items-center gap-1.5">
-                  <Move className="h-3 w-3 animate-pulse" /> Use scroll-wheel to
-                  zoom, click and hold canvas viewport grid background to pan
-                </span>
-                <h3 className="text-xs font-mono font-bold text-slate-900 uppercase tracking-wide">
+          <div
+            className="relative flex h-[90vh] w-full flex-col overflow-hidden rounded-2xl border shadow-2xl"
+            style={{ background: "#faf7f2", borderColor: "#e6dfd1" }}
+          >
+            <div
+              className="z-10 flex items-center justify-between border-b px-6 py-4"
+              style={{ borderColor: "#e6dfd1", background: "#fff" }}
+            >
+              <div>
+                <div
+                  className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.18em]"
+                  style={{ color: "#e07856" }}
+                >
+                  <Move className="h-3 w-3" /> Scroll to zoom · drag to pan
+                </div>
+                <h3
+                  className="mt-1 font-serif text-2xl"
+                  style={{ color: "#1a1a2e" }}
+                >
                   {activeExpanded.title}
                 </h3>
               </div>
-
               <button
                 onClick={() => setActiveExpanded(null)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono font-bold uppercase text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm"
+                className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[11px] font-medium transition-all"
+                style={{
+                  borderColor: "#e6dfd1",
+                  background: "#faf7f2",
+                  color: "#1a1a2e",
+                }}
               >
-                <X className="h-3.5 w-3.5" /> Exit Viewport
+                <X className="h-3.5 w-3.5" /> Close
               </button>
             </div>
-
-            {/* FULLY FUNCTIONAL INTERACTIVE REACT FLOW CANVAS */}
-            <div className="flex-1 w-full h-full relative bg-slate-50/50">
+            <div
+              className="relative h-full w-full flex-1"
+              style={{ background: "#fff" }}
+            >
               <ReactFlow
                 defaultNodes={activeExpanded.nodes}
                 defaultEdges={activeExpanded.edges}
@@ -161,19 +200,7 @@ export function BehindTheScenes() {
                 maxZoom={1.5}
                 colorMode="light"
               >
-                <Background color="#cbd5e1" gap={16} size={1.5} />
-                {/* <Controls className="bg-white border border-slate-200 text-slate-600 rounded-lg overflow-hidden fill-slate-600 shadow-md" /> */}
-                {/* <MiniMap
-                  style={{
-                    background: "#f8fafc",
-                    border: "1px solid #e2e8f0",
-                    borderRadius: "8px",
-                  }}
-                  nodeColor={(node) =>
-                    (node.style?.borderColor as string) || "#cbd5e1"
-                  }
-                  maskColor="rgba(255, 255, 255, 0.5)"
-                /> */}
+                <Background color="#e6dfd1" gap={16} size={1.5} />
               </ReactFlow>
             </div>
           </div>

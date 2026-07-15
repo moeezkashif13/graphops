@@ -1,23 +1,8 @@
-// src/components/AgentWorkspace.tsx
 // @ts-nocheck
-
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import {
-  BrainCircuit,
-  Check,
-  GitBranch,
-  XCircle,
-  Activity,
-} from "lucide-react";
+import { BrainCircuit, Check, XCircle, Activity } from "lucide-react";
 import type { Ticket } from "./TicketQueue";
 import { AgentVisualGraph } from "./AgentVisualGraph";
 import { ModeToggle } from "./ModeToggle";
@@ -41,164 +26,254 @@ export function AgentWorkspace({
   const [editedDraft, setEditedDraft] = useState("");
 
   useEffect(() => {
-    if (ticket) {
-      setEditedDraft(currentDraft || "");
-    }
+    setEditedDraft(currentDraft || "");
   }, [ticket, currentDraft]);
-
-  useEffect(() => {
-    if (currentDraft) {
-      setEditedDraft(currentDraft);
-    } else {
-      setEditedDraft("");
-    }
-  }, [currentDraft]);
 
   if (!ticket) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-slate-500 bg-slate-50 h-full">
-        <BrainCircuit className="h-12 w-12 text-indigo-500/60 stroke-[1.5] mb-3 animate-pulse" />
-        <p className="text-xs font-mono tracking-wide max-w-[280px] text-center leading-relaxed">
-          Select an inbound pipeline node to visualize LangGraph orchestration
-          tracks.
+      <div
+        className="flex h-full w-full flex-col items-center justify-center"
+        style={{ background: "#faf7f2" }}
+      >
+        <div
+          className="grid h-16 w-16 place-items-center rounded-full border"
+          style={{ borderColor: "#e6dfd1", background: "#fff" }}
+        >
+          <BrainCircuit
+            className="h-7 w-7"
+            style={{ color: "#0d5c63" }}
+            strokeWidth={1.5}
+          />
+        </div>
+        <h2 className="mt-6 font-serif text-3xl" style={{ color: "#1a1a2e" }}>
+          Select a ticket
+        </h2>
+        <p
+          className="mt-2 max-w-sm text-center text-sm"
+          style={{ color: "#6b6b7d" }}
+        >
+          Choose an inbound thread from the queue to inspect its orchestration
+          trace.
         </p>
       </div>
     );
   }
 
-  const shouldShowApprovalWorkspace =
+  const showApproval =
     ticket.status === "pending_approval" ||
     (currentDraft &&
       ticket.status !== "resolved" &&
       ticket.status !== "rejected");
 
   return (
-    <div className="w-full h-full max-h-full flex flex-col overflow-hidden bg-slate-50">
-      <div className="grid grid-cols-1   lg:grid-cols-2 w-full h-full max-h-full flex-1 overflow-hidden">
-        {/* Left Hand: Ticket Details & NEW Real-time LangGraph Visual Engine */}
-        <div className="p-6   overflow-y-auto border-r border-slate-200 flex flex-col space-y-5 custom-scrollbar h-full ">
+    <div
+      className="flex h-full w-full flex-col overflow-hidden"
+      style={{ background: "#faf7f2" }}
+    >
+      <div className="grid h-full w-full flex-1 grid-cols-1 overflow-hidden lg:grid-cols-2">
+        {/* LEFT — Payload + Graph */}
+        <section
+          className="custom-scrollbar flex h-full flex-col space-y-6 overflow-y-auto border-r p-8"
+          style={{ borderColor: "#e6dfd1" }}
+        >
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-indigo-500">
-              ⚡ Live Channel Stream Payload
+            <span
+              className="text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ color: "#0d5c63" }}
+            >
+              Live
             </span>
-            <h1 className="text-lg font-mono font-semibold text-slate-900 mt-1 truncate">
+            <h1
+              className="my-2 truncate font-serif text-2xl leading-none"
+              style={{ color: "#1a1a2e" }}
+            >
               {ticket.sender}
             </h1>
-            <p className="text-[11px] font-mono text-slate-500 mt-0.5">
-              TIMESTAMP // {ticket.timestamp}
+            <p className=" font-serif text-[11px]" style={{ color: "#6b6b7d" }}>
+              {ticket.timestamp}
             </p>
           </div>
 
-          <div className="p-4 bg-slate-100/50 border border-slate-200 rounded-xl text-xs text-slate-700 font-normal leading-relaxed whitespace-pre-wrap shadow-sm shrink-0">
+          <div
+            className="shrink-0 rounded-2xl border p-5 text-sm leading-relaxed"
+            style={{
+              background: "#fff",
+              borderColor: "#e6dfd1",
+              color: "#3a3a52",
+            }}
+          >
             {ticket.body}
           </div>
 
-          {/* SWAPPED OUT TEXT LOGS WITH THE REACT FLOW CANVAS INTEGRATION */}
-          <div className="space-y-2 flex-1 flex flex-col min-h-0">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
-              <Activity className="h-3.5 w-3.5 text-indigo-500 animate-pulse" />
-              LangGraph Orchestration Trace Canvas
-            </span>
-            <ModeToggle />
-            <div className="flex-1 w-full border border-slate-200 rounded-xl overflow-hidden relative bg-slate-100/20 min-h-[340px]">
+          <div className="flex min-h-0 flex-1 flex-col space-y-3">
+            <div className="flex items-center justify-between">
+              <span
+                className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em]"
+                style={{ color: "#1a1a2e" }}
+              >
+                <Activity
+                  className="h-3.5 w-3.5"
+                  style={{ color: "#e07856" }}
+                />
+                Orchestration trace
+              </span>
+              <ModeToggle />
+            </div>
+            <div
+              className="relative min-h-[360px] w-full flex-1 overflow-hidden rounded-2xl border"
+              style={{ borderColor: "#e6dfd1", background: "#fff" }}
+            >
               <AgentVisualGraph status={ticket.status} logs={graphLogs} />
             </div>
-            <div className="">
-              <TraceLogsDisplay logs={graphLogs} />
-            </div>
+            <TraceLogsDisplay logs={graphLogs} />
           </div>
-        </div>
+        </section>
 
-        {/* Right Hand: Human-In-The-Loop Interactive Control Interface */}
-        <div className="p-6 bg-white flex flex-col space-y-5 h-full min-h-0 overflow-hidden">
+        {/* RIGHT — Human in the loop */}
+        <section
+          className="flex h-full min-h-0 flex-col space-y-6 overflow-hidden p-8"
+          style={{ background: "#fff" }}
+        >
           <div className="shrink-0">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500">
-              State Interpolation Intercept
+            <span
+              className="text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ color: "#e07856" }}
+            >
+              Interpolation intercept
             </span>
-            <h3 className="text-sm font-semibold text-slate-800 mt-1">
-              Autonomous Safety Assessment
+            <h3
+              className="mt-2 font-serif text-3xl leading-none"
+              style={{ color: "#1a1a2e" }}
+            >
+              Safety assessment
             </h3>
           </div>
 
-          {/* Render Condition Variant Context Blocks */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-0.5 space-y-4">
-            {shouldShowApprovalWorkspace ? (
-              <Card className="border-amber-500/20 shadow-sm bg-amber-500/[0.01] flex flex-col rounded-xl overflow-hidden">
-                <CardHeader className="pb-3 border-b border-amber-500/10 bg-amber-500/[0.01] shrink-0">
-                  <CardTitle className="text-xs font-semibold font-mono flex items-center gap-2 text-amber-600">
-                    <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-                    Execution Paused: `interrupt()`
-                  </CardTitle>
-                  <CardDescription className="text-[11px] text-slate-500 font-normal leading-relaxed mt-1">
-                    High churn risk classification detected. Audit or mutate the
-                    current LLM state machine context frame draft below before
-                    unpausing.
-                  </CardDescription>
-                </CardHeader>
-
-                <CardContent className="p-4 space-y-4 bg-slate-50/50">
+          <div className="custom-scrollbar flex-1 space-y-4 overflow-y-auto pr-1">
+            {showApproval ? (
+              <div
+                className="overflow-hidden rounded-2xl border"
+                style={{ borderColor: "#d4a147", background: "#fbf1dc" }}
+              >
+                <div
+                  className="border-b px-5 py-4"
+                  style={{ borderColor: "#e8d49a" }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-2 w-2 animate-pulse rounded-full"
+                      style={{ background: "#d4a147" }}
+                    />
+                    <span
+                      className="font-serif text-[11px] font-semibold uppercase tracking-wider"
+                      style={{ color: "#8a6414" }}
+                    >
+                      Execution paused · interrupt()
+                    </span>
+                  </div>
+                  <p
+                    className="mt-2 text-[13px] leading-relaxed"
+                    style={{ color: "#5c4a1e" }}
+                  >
+                    High churn risk detected. Audit or edit the draft below
+                    before resuming the graph.
+                  </p>
+                </div>
+                <div
+                  className="space-y-4 p-5"
+                  style={{ background: "#faf7f2" }}
+                >
                   <Textarea
                     value={editedDraft}
                     onChange={(e) => setEditedDraft(e.target.value)}
-                    className="w-full min-h-[140px] font-mono text-xs p-3.5 bg-white border-slate-200 text-slate-800 focus-visible:ring-amber-500/30 focus-visible:border-amber-500/50 rounded-xl overflow-y-auto custom-scrollbar resize-none"
-                    placeholder="Reviewing active agent response buffer data..."
+                    className="custom-scrollbar min-h-[180px] w-full resize-none rounded-xl border p-4 font-serif text-[13px] leading-relaxed"
+                    style={{
+                      background: "#fff",
+                      borderColor: "#e6dfd1",
+                      color: "#1a1a2e",
+                    }}
+                    placeholder="Reviewing agent response buffer..."
                   />
-                  <div className="flex items-center justify-end gap-2.5">
+                  <div className="flex items-center justify-end gap-2">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300"
                       onClick={onReject}
+                      className="border font-medium text-xs"
+                      style={{
+                        borderColor: "#a63d40",
+                        background: "#f6e5e5",
+                        color: "#a63d40",
+                      }}
                     >
-                      Kill Thread Context
+                      Reject thread
                     </Button>
                     <Button
                       size="sm"
-                      className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white gap-1.5 shadow-lg shadow-indigo-600/20 font-medium"
                       onClick={() => onApprove(editedDraft)}
+                      className="gap-1.5 text-xs font-medium text-white"
+                      style={{ background: "#0d5c63" }}
                     >
-                      <Check className="h-3.5 w-3.5" /> Commit State
-                      Modification
+                      <Check className="h-3.5 w-3.5" /> Approve & resume
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ) : ticket.status === "rejected" ? (
-              <div className="p-6 border border-rose-500/20 rounded-xl bg-rose-500/[0.01] shadow-sm text-center flex flex-col items-center justify-center">
-                <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-full text-rose-500 mb-3 animate-pulse">
-                  <XCircle className="h-5 w-5" />
-                </div>
-                <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-rose-600">
-                  Thread Killed — Manual Routing Engaged
-                </h4>
-                <p className="text-[11px] text-slate-600 mt-2 max-w-[290px] leading-relaxed">
-                  The autonomous trace engine loop was terminated to enforce
-                  safety barriers.
-                </p>
-              </div>
+              <StatusPanel
+                tone={{ border: "#a63d40", bg: "#f6e5e5", fg: "#a63d40" }}
+                icon={<XCircle className="h-5 w-5" />}
+                title="Thread terminated"
+                body="The autonomous loop was closed to enforce safety."
+              />
             ) : ticket.status === "resolved" ? (
-              <div className="p-6 border border-emerald-500/20 rounded-xl bg-emerald-500/[0.01] shadow-sm text-center flex flex-col items-center justify-center">
-                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-500 mb-3">
-                  <Check className="h-5 w-5" />
-                </div>
-                <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-emerald-700">
-                  Ticket Automation Finalized
-                </h4>
-                <p className="text-[11px] text-slate-600 mt-2 max-w-[240px] leading-relaxed">
-                  Graph execution sequence concluded cleanly. Permanent ledger
-                  checkpoints written down across datastores successfully.
-                </p>
-              </div>
+              <StatusPanel
+                tone={{ border: "#7a9b76", bg: "#ecf1ea", fg: "#4a6a48" }}
+                icon={<Check className="h-5 w-5" />}
+                title="Automation finalized"
+                body="Graph concluded cleanly. Checkpoints written to datastore."
+              />
             ) : (
-              <div className="p-8 border border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-500 text-center flex items-center justify-center">
-                <p className="text-[11px] font-mono tracking-wider animate-pulse">
-                  Asynchronous background workers active...
+              <div
+                className="rounded-2xl border border-dashed p-10 text-center"
+                style={{ borderColor: "#e6dfd1", background: "#faf7f2" }}
+              >
+                <p
+                  className="font-serif text-[11px] animate-pulse"
+                  style={{ color: "#6b6b7d" }}
+                >
+                  Background workers active…
                 </p>
               </div>
             )}
           </div>
-        </div>
+        </section>
       </div>
+    </div>
+  );
+}
+
+function StatusPanel({ tone, icon, title, body }: any) {
+  return (
+    <div
+      className="flex flex-col items-center rounded-2xl border p-8 text-center"
+      style={{ borderColor: tone.border, background: tone.bg }}
+    >
+      <div
+        className="grid h-11 w-11 place-items-center rounded-full"
+        style={{ background: "#fff", color: tone.fg }}
+      >
+        {icon}
+      </div>
+      <h4 className="mt-4 font-serif text-2xl" style={{ color: tone.fg }}>
+        {title}
+      </h4>
+      <p
+        className="mt-1 max-w-xs text-[13px] leading-relaxed"
+        style={{ color: "#3a3a52" }}
+      >
+        {body}
+      </p>
     </div>
   );
 }

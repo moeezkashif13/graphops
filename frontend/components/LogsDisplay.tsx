@@ -7,32 +7,36 @@ interface TraceLogsDisplayProps {
 }
 
 export function TraceLogsDisplay({ logs }: TraceLogsDisplayProps) {
-  const isRecruiterMode = useSelector(
-    (state: RootState) => state.eli5.isRecruiterMode,
-  );
+  const isRecruiterMode = useSelector((s: RootState) => s.eli5.isRecruiterMode);
 
   return (
-    <div className="flex-1 border border-slate-200 bg-slate-100/50 rounded-lg shadow-lg p-4 space-y-3 font-mono text-[11px] leading-relaxed text-slate-700">
-      {logs.map((log, index) => {
-        const displayMessage = isRecruiterMode ? translateLogToEli5(log) : log;
-
+    <div
+      className="space-y-2 rounded-2xl border p-4"
+      style={{ background: "#fff", borderColor: "#e6dfd1" }}
+    >
+      {logs.map((log, i) => {
+        const msg = isRecruiterMode ? translateLogToEli5(log) : log;
+        const isEli5 = isRecruiterMode;
         return (
           <div
-            key={index}
-            className={`p-3 rounded-lg border transition-all duration-200 ${
-              isRecruiterMode
-                ? "bg-amber-500/[0.01] border-amber-500/20 text-slate-700"
-                : "bg-slate-50 border-slate-200/60 text-emerald-700"
-            }`}
+            key={i}
+            className="rounded-xl border px-3 py-2.5 text-[12px] leading-relaxed font-sans"
+            style={{
+              background: isEli5 ? "#fbf1dc" : "#faf7f2",
+              borderColor: isEli5 ? "#e8d49a" : "#e6dfd1",
+              color: isEli5 ? "#5c4a1e" : "#3a3a52",
+            }}
           >
-            {!isRecruiterMode && (
-              <span className="text-slate-400 mr-1.5 font-sans">$</span>
+            {!isEli5 && (
+              <span style={{ color: "#0d5c63" }} className="mr-2">
+                ›
+              </span>
             )}
             <span
               dangerouslySetInnerHTML={{
-                __html: displayMessage.replace(
+                __html: msg.replace(
                   /\*\*(.*?)\*\*/g,
-                  '<b class="text-slate-950 font-bold">$1</b>',
+                  '<b style="color:#1a1a2e">$1</b>',
                 ),
               }}
             />
