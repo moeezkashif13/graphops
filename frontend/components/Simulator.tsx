@@ -27,6 +27,9 @@ export function Simulator({
   const [customSender, setCustomSender] = useState("recruiter_test@hiring.com");
 
   const triggerSimulation = async (sender, body) => {
+    console.log("hellloooo");
+
+    return;
     if (!body.trim()) return;
     setLoading(true);
     try {
@@ -81,7 +84,7 @@ export function Simulator({
               onClick={() => {
                 triggerSimulation(tmpl.sender, tmpl.body);
               }}
-              className="text-left text-xs bg-slate-800/60 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-700/60 transition-all duration-150 disabled:opacity-50"
+              className="text-left cursor-pointer text-xs bg-slate-800/60 hover:bg-slate-800 text-slate-300 p-2.5 rounded-lg border border-slate-700/60 transition-all duration-150 disabled:opacity-50"
             >
               {tmpl.label}
             </button>
